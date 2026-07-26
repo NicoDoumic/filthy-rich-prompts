@@ -24,12 +24,4 @@ Starting with Phase 1, this file is generated from [changesets](https://github.c
 
 ## [Unreleased]
 
-### Added
-
-- Phase 0 repository foundation: mission, vision, and design philosophy
-- Architecture specification: composable pass pipeline with immutable context
-- SKILL.md — the OpenCode skill contract (Agent Skills format)
-- Design specs: plugin API, configuration format, CLI, TUI, benchmarking, evaluation metrics, testing strategy
-- Contributor infrastructure: issue forms, PR template, label taxonomy, code of conduct
-- Worked before/after examples for coding, bug-report, research, and writing requests
-- Roadmap with milestones M0–M5 and the Phase 1 build scope
+(The Phase 0 repository foundation — mission, vision, philosophy, architecture, SKILL.md, design specs, contributor infrastructure, worked examples, and the roadmap — shipped as part of 0.1.0 above.)

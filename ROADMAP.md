@@ -1,5 +1,7 @@
 # Roadmap
 
+> **Looking for the actionable plan? It's [PLAN.md](PLAN.md)** — the single authoritative path to public release (phases, exit criteria, open items, and the auto-refine toggle). This file is the milestone record it draws from.
+
 This roadmap is a living document. Dates are deliberately absent — we optimize for _correct sequencing_ and _quality gates_, not deadlines. Each milestone has explicit exit criteria; a milestone is done when its criteria are met, not before.
 
 Legend: ✅ done · 🚧 in progress · ⬜ not started

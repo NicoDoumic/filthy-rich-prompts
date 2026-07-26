@@ -7,7 +7,7 @@
 An OpenCode skill that turns messy human requests into high-quality AI instructions — **without ever changing what you meant**.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/status-phase%200%20%C2%B7%20design-blue.svg)](ROADMAP.md)
+[![Status](https://img.shields.io/badge/status-v0.1.0%20%C2%B7%20M1%20shipped-brightgreen.svg)](PLAN.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 </div>
@@ -151,10 +151,11 @@ Same intent. Same information. Objectively better instructions.
 
 ## Status
 
-**Phase 0 — repository foundation.** This repository currently contains design, not implementation. Everything needed to start building is specified:
+**v0.1.0 — M1 shipped.** The core engine and three foundational passes (intent-detection, ambiguity-detection, structure) are implemented, tested (77 tests, property invariants P1–P5, coverage gates), and verified to load in OpenCode 1.18.5. The path to a public 1.0 lives in **[PLAN.md](PLAN.md)** — including the auto-refine toggle that routes every OpenCode prompt through the refiner first. Design specs:
 
 | Topic                      | Doc                                                                                             |
 | -------------------------- | ----------------------------------------------------------------------------------------------- |
+| **Path to public release** | **[PLAN.md](PLAN.md)**                                                                          |
 | Architecture & pass model  | [docs/architecture.md](docs/architecture.md)                                                    |
 | Design philosophy          | [docs/design-philosophy.md](docs/design-philosophy.md)                                          |
 | Plugin API (future)        | [docs/plugin-api.md](docs/plugin-api.md)                                                        |
