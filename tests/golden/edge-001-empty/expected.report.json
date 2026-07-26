@@ -1,0 +1,37 @@
+{
+  "toolVersion": "<version>",
+  "passRuns": [
+    {
+      "id": "intent-detection",
+      "phase": 10,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "ambiguity-detection",
+      "phase": 20,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "structure",
+      "phase": 50,
+      "kind": "transformation",
+      "status": "applied"
+    }
+  ],
+  "intent": {
+    "category": "unknown",
+    "confidence": 0
+  },
+  "diagnostics": [
+    {
+      "pass": "intent-detection",
+      "severity": "info",
+      "code": "INTENT_UNKNOWN",
+      "message": "no category cues detected — treating the request as uncategorized"
+    }
+  ],
+  "explanations": [],
+  "assumptions": []
+}

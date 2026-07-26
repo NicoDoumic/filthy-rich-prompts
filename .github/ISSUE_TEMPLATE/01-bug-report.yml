@@ -1,0 +1,68 @@
+name: 🐛 Bug Report
+description: Report incorrect refinement behavior — intent drift, lost information, bad output, crashes
+title: "[Bug]: "
+labels: ["type: bug", "status: needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. In this project, **the prompt is the evidence**: a bug report without the raw prompt and the refined output can rarely be acted on. If your prompt contains secrets or private info, redact *only* those spans (mark them `[redacted]`) — do not paraphrase the whole prompt, or we can't reproduce the behavior.
+
+  - type: dropdown
+    id: bug-class
+    attributes:
+      label: What kind of bug is this?
+      description: Intent drift is our severity-1 class — be honest about which one this is.
+      options:
+        - Intent drift — the refined prompt asks for something different than I did
+        - Information loss — something from my raw prompt disappeared without accounting
+        - Invented requirements — unlabeled additions presented as if I said them
+        - Unexplained change — a transformation with no rationale
+        - Bad output quality — preserved intent, but the result isn't better
+        - Crash / error — the tool failed to produce output at all
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: raw-prompt
+    attributes:
+      label: Raw prompt (your original input)
+      description: Exactly as you entered it, before refinement.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: refined-output
+    attributes:
+      label: Refined output (what the tool produced)
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should have happened?
+      description: For intent drift specifically — what did you actually ask for, and how did the output change it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: doctor-output
+    attributes:
+      label: Environment & config
+      description: Paste the output of `frp doctor` (CLI) or your mode/config if using the skill in OpenCode. Include version numbers.
+      render: text
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: fixture-consent
+    attributes:
+      label: Benchmark fixture consent
+      description: Every real-world drift case becomes a regression fixture within one release (see docs/benchmarking.md).
+      options:
+        - label: I consent to this prompt (redacted as provided above) being added to the public benchmark dataset
+          required: false

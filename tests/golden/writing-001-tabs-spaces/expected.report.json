@@ -1,0 +1,59 @@
+{
+  "toolVersion": "<version>",
+  "passRuns": [
+    {
+      "id": "intent-detection",
+      "phase": 10,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "ambiguity-detection",
+      "phase": 20,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "structure",
+      "phase": 50,
+      "kind": "transformation",
+      "status": "applied"
+    }
+  ],
+  "intent": {
+    "category": "writing",
+    "confidence": 0.8571428571428571,
+    "goal": "write a blog post about why tabs are better than spaces"
+  },
+  "diagnostics": [
+    {
+      "pass": "intent-detection",
+      "severity": "info",
+      "code": "INTENT_DETECTED",
+      "message": "request classified as \"writing\" (confidence 0.86)"
+    },
+    {
+      "pass": "ambiguity-detection",
+      "severity": "info",
+      "code": "VAGUE_QUALIFIER",
+      "message": "vague qualifier — the quality target is undefined: \"better\"",
+      "span": {
+        "start": 37,
+        "end": 43
+      },
+      "suggestions": [
+        "specify a measurable target (e.g. a number, a comparison point)"
+      ]
+    }
+  ],
+  "explanations": [
+    {
+      "pass": "structure",
+      "change": "added a `# Task` heading",
+      "reason": "an explicit anchor makes the request scannable for the executing model",
+      "before": "write a blog post about why tabs are better than spaces",
+      "after": "# Task"
+    }
+  ],
+  "assumptions": []
+}

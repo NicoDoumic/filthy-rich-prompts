@@ -1,0 +1,46 @@
+{
+  "toolVersion": "<version>",
+  "passRuns": [
+    {
+      "id": "intent-detection",
+      "phase": 10,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "ambiguity-detection",
+      "phase": 20,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "structure",
+      "phase": 50,
+      "kind": "transformation",
+      "status": "applied"
+    }
+  ],
+  "intent": {
+    "category": "research",
+    "confidence": 0.75,
+    "goal": "can you look into whether we should switch from postgres to sqlite for our saas"
+  },
+  "diagnostics": [
+    {
+      "pass": "intent-detection",
+      "severity": "info",
+      "code": "INTENT_DETECTED",
+      "message": "request classified as \"research\" (confidence 0.75)"
+    }
+  ],
+  "explanations": [
+    {
+      "pass": "structure",
+      "change": "added a `# Task` heading",
+      "reason": "an explicit anchor makes the request scannable for the executing model",
+      "before": "can you look into whether we should switch from postgres to ",
+      "after": "# Task"
+    }
+  ],
+  "assumptions": []
+}

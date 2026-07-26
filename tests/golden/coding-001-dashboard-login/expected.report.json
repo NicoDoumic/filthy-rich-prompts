@@ -1,0 +1,105 @@
+{
+  "toolVersion": "<version>",
+  "passRuns": [
+    {
+      "id": "intent-detection",
+      "phase": 10,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "ambiguity-detection",
+      "phase": 20,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "structure",
+      "phase": 50,
+      "kind": "transformation",
+      "status": "applied"
+    }
+  ],
+  "intent": {
+    "category": "coding",
+    "confidence": 0.5833333333333334,
+    "goal": "hey the app is kinda slow when I open the dashboard and sometimes it just spins forever lol. can you make it faster?"
+  },
+  "diagnostics": [
+    {
+      "pass": "intent-detection",
+      "severity": "info",
+      "code": "INTENT_DETECTED",
+      "message": "request classified as \"coding\" (confidence 0.58)"
+    },
+    {
+      "pass": "ambiguity-detection",
+      "severity": "warning",
+      "code": "VAGUE_QUANTIFIER",
+      "message": "vague quantifier — the amount or degree is imprecise: \"kinda\"",
+      "span": {
+        "start": 15,
+        "end": 20
+      },
+      "suggestions": [
+        "replace with an observable or measurable description"
+      ]
+    },
+    {
+      "pass": "ambiguity-detection",
+      "severity": "info",
+      "code": "VAGUE_QUALIFIER",
+      "message": "vague qualifier — the quality target is undefined: \"faster\"",
+      "span": {
+        "start": 109,
+        "end": 115
+      },
+      "suggestions": [
+        "specify a measurable target (e.g. a number, a comparison point)"
+      ]
+    },
+    {
+      "pass": "ambiguity-detection",
+      "severity": "info",
+      "code": "HEDGE_LANGUAGE",
+      "message": "hedge — signals uncertainty the executor should not silently resolve: \"maybe\"",
+      "span": {
+        "start": 122,
+        "end": 127
+      },
+      "suggestions": [
+        "keep the uncertainty explicit, or clarify it"
+      ]
+    },
+    {
+      "pass": "ambiguity-detection",
+      "severity": "info",
+      "code": "COMPOUND_REQUEST",
+      "message": "possible compound request — multiple tasks may be fused together: \"also\"",
+      "span": {
+        "start": 117,
+        "end": 121
+      },
+      "suggestions": [
+        "consider whether the tasks are separable"
+      ]
+    }
+  ],
+  "explanations": [
+    {
+      "pass": "structure",
+      "change": "added a `# Task` heading",
+      "reason": "an explicit anchor makes the request scannable for the executing model",
+      "before": "hey the app is kinda slow when I open the dashboard and some",
+      "after": "# Task"
+    },
+    {
+      "pass": "structure",
+      "change": "relocated 1 context sentence into a `## Context` section",
+      "reason": "context buried in prose is routinely missed by executors; it belongs in a canonical position",
+      "before": "also maybe fix the login bug where it logs me out. using rea",
+      "after": "## Context"
+    }
+  ],
+  "assumptions": []
+}

@@ -1,0 +1,85 @@
+name: 🧩 Refinement Pass Proposal
+description: Propose a new refinement pass — the highest-value contribution to this project
+title: "[Pass]: "
+labels: ["type: pass-proposal", "status: needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The bar for new passes is deliberately high: every pass must compose safely with all existing ones and must never compromise intent preservation. Read [docs/architecture.md](https://github.com/filthy-rich-prompts/filthy-rich-prompts/blob/main/docs/architecture.md) and the [pass proposal guide](https://github.com/filthy-rich-prompts/filthy-rich-prompts/blob/main/CONTRIBUTING.md#proposing-a-new-refinement-pass) first. Strong proposals are short, concrete, and argue the hard question (§4 below) honestly.
+
+  - type: input
+    id: pass-name
+    attributes:
+      label: Pass ID
+      description: Kebab-case, e.g. `acceptance-criteria-suggester`
+      placeholder: my-pass-name
+    validations:
+      required: true
+
+  - type: dropdown
+    id: pass-kind
+    attributes:
+      label: Pass kind
+      description: See docs/architecture.md §3. Detection passes never mutate; transformation passes mutate and must explain every change; generation passes assemble output.
+      options:
+        - detection
+        - transformation
+        - generation
+    validations:
+      required: true
+
+  - type: textarea
+    id: improves
+    attributes:
+      label: What does it improve?
+      description: Which refinement dimensions — structure / clarity / constraints / objectives / context / terminology / ambiguity / formatting — and what user pain does it address?
+    validations:
+      required: true
+
+  - type: input
+    id: phase
+    attributes:
+      label: Proposed phase
+      description: See the phase table in docs/architecture.md §3 (10 detect-intent · 20 diagnose · 30 enrich · 40 constrain · 50 structure · 60 generate · 70 verify). Why does it belong there?
+      placeholder: "e.g. 40 — needs diagnostics from phase 20, must run before structure"
+    validations:
+      required: true
+
+  - type: textarea
+    id: intent-argument
+    attributes:
+      label: Why can't it change intent?
+      description: THE question. Argue it. Show a tricky input (ambiguous, adversarial, or edge-case) and walk through how the pass preserves meaning. Passes that only work "on normal inputs" will be asked for adversarial fixtures.
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Before / after example
+      description: One realistic raw prompt, the expected output, and a one-line rationale per change — model it on examples/before-after/. For detection passes, show the diagnostics emitted instead.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: implementation
+    attributes:
+      label: Implementation approach
+      description: Heuristic passes are deterministic, offline, and testable; LLM-powered passes must justify why heuristics can't reach the same quality (see docs/open-questions.md Q2).
+      options:
+        - Heuristic (patterns/rules — deterministic, no model)
+        - LLM-powered (requires the model provider port)
+        - Hybrid (heuristic baseline, optional LLM upgrade)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: overlap-check
+    attributes:
+      label: Overlap check
+      options:
+        - label: I checked the existing pass list and this is not a subset/variant of an existing pass (or I explained why it should replace one)
+          required: true
+        - label: I am willing to write the unit tests, golden fixture(s), and docs entry required for this pass
+          required: true

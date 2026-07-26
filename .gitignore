@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Test & coverage artifacts
+coverage/
+.nyc_output/
+*.lcov
+
+# Eval / benchmark local results (committed baselines live in benchmarks/results/baseline.json)
+.eval-cache/
+benchmarks/results/local/
+
+# Environment & secrets — NEVER commit these (prompts may contain secrets)
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+
+# Package managers
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Changesets local state
+.changeset/*.local.md

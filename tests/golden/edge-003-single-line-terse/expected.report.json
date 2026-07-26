@@ -1,0 +1,46 @@
+{
+  "toolVersion": "<version>",
+  "passRuns": [
+    {
+      "id": "intent-detection",
+      "phase": 10,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "ambiguity-detection",
+      "phase": 20,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "structure",
+      "phase": 50,
+      "kind": "transformation",
+      "status": "applied"
+    }
+  ],
+  "intent": {
+    "category": "bug-report",
+    "confidence": 0.5,
+    "goal": "fix the typo in README.md"
+  },
+  "diagnostics": [
+    {
+      "pass": "intent-detection",
+      "severity": "info",
+      "code": "INTENT_DETECTED",
+      "message": "request classified as \"bug-report\" (confidence 0.50)"
+    }
+  ],
+  "explanations": [
+    {
+      "pass": "structure",
+      "change": "added a `# Task` heading",
+      "reason": "an explicit anchor makes the request scannable for the executing model",
+      "before": "fix the typo in README.md",
+      "after": "# Task"
+    }
+  ],
+  "assumptions": []
+}

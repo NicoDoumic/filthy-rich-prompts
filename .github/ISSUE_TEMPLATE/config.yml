@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/filthy-rich-prompts/filthy-rich-prompts/discussions
+    about: Questions, ideas, show-and-tell — anything that isn't an actionable bug, feature, or pass proposal
+  - name: 📖 Design docs
+    url: https://github.com/filthy-rich-prompts/filthy-rich-prompts/tree/main/docs
+    about: Architecture, philosophy, and specs — many questions are answered here
+  - name: 🗺️ Roadmap
+    url: https://github.com/filthy-rich-prompts/filthy-rich-prompts/blob/main/ROADMAP.md
+    about: Check whether your idea is already planned in a milestone

@@ -1,0 +1,62 @@
+name: 💡 Feature Request
+description: Suggest a capability that isn't a new refinement pass (use the pass proposal form for those)
+title: "[Feature]: "
+labels: ["type: feature", "status: needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Proposing a new **refinement pass**? Use the [pass proposal form](03-pass-proposal.yml) instead — it has a higher bar and a dedicated checklist.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you trying to do that the tool currently makes hard or impossible? Describe the situation, not the solution.
+      placeholder: "When I..., I can't... / I have to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What would you like to exist? How would you invoke it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Workarounds you've tried, other tools, or reasons existing features don't cover this.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - area: core (pipeline engine)
+        - area: passes (built-in pass behavior)
+        - area: cli
+        - area: tui
+        - area: config
+        - area: plugins (plugin API)
+        - area: eval (benchmarks & metrics)
+        - area: docs
+        - other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: principles-check
+    attributes:
+      label: Fit check
+      description: Features that conflict with the design philosophy are declined even when popular — see docs/design-philosophy.md.
+      options:
+        - label: This feature does not change user intent, invent requirements, or remove information
+          required: true
+        - label: This feature does not require the core pipeline to send prompts to a network service by default
+          required: true

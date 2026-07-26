@@ -1,0 +1,59 @@
+{
+  "toolVersion": "<version>",
+  "passRuns": [
+    {
+      "id": "intent-detection",
+      "phase": 10,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "ambiguity-detection",
+      "phase": 20,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "structure",
+      "phase": 50,
+      "kind": "transformation",
+      "status": "applied"
+    }
+  ],
+  "intent": {
+    "category": "bug-report",
+    "confidence": 0.75,
+    "goal": "ur app crashed when i clicked export, fix asap, it worked yesterday"
+  },
+  "diagnostics": [
+    {
+      "pass": "intent-detection",
+      "severity": "info",
+      "code": "INTENT_DETECTED",
+      "message": "request classified as \"bug-report\" (confidence 0.75)"
+    },
+    {
+      "pass": "ambiguity-detection",
+      "severity": "warning",
+      "code": "VAGUE_DEADLINE",
+      "message": "vague deadline — \"asap\" and friends are urgencies, not time constraints: \"asap\"",
+      "span": {
+        "start": 42,
+        "end": 46
+      },
+      "suggestions": [
+        "record as priority, or give a concrete date/duration"
+      ]
+    }
+  ],
+  "explanations": [
+    {
+      "pass": "structure",
+      "change": "added a `# Task` heading",
+      "reason": "an explicit anchor makes the request scannable for the executing model",
+      "before": "ur app crashed when i clicked export, fix asap, it worked ye",
+      "after": "# Task"
+    }
+  ],
+  "assumptions": []
+}
