@@ -21,7 +21,7 @@ Legend: ✅ done · 🚧 in progress · ⬜ not started
 
 ---
 
-## M1 — Core Engine + Foundational Passes ⬜ _(= Phase 1)_
+## M1 — Core Engine + Foundational Passes 🚧 _(= Phase 1 — exit criteria 3/4; the last needs an external human verifier)_
 
 **Goal:** A working refinement pipeline, end to end, with three passes and a test harness.
 
@@ -36,7 +36,7 @@ Legend: ✅ done · 🚧 in progress · ⬜ not started
    - `structure` (phase 50, transformation) — canonical section layout under the verbatim-span doctrine, with per-change explanations
 5. **Golden-test harness** ✅ — `tests/golden/` (8 fixtures + harness) run in CI, per [docs/testing-strategy.md](docs/testing-strategy.md) (reduced-fidelity in M1 — see its §3 amendment).
 6. **CI** ✅ — `.github/workflows/ci.yml`: lint, format, typecheck, zero-dep guard, unit+golden+property with coverage gates, build, pack smoke; matrix OS × Node {22, 24}. Plus PR-title check and changesets release workflow.
-7. **Verification that OpenCode loads SKILL.md** — manual smoke test documenting exact install steps in `examples/usage.md`.
+7. **Verification that OpenCode loads SKILL.md** ✅ — smoke-tested on OpenCode 1.18.5: discovery + frontmatter contract verified via `opencode debug skill`; install steps documented in `examples/usage.md`; Q6 resolved.
 
 **Explicitly out of scope for M1:** CLI, TUI, LLM-powered passes, config file loading, plugins, scoring. (A `--help`-less internal `src/cli/dev.ts` entry for manual testing is allowed but is not the CLI.)
 
@@ -44,7 +44,7 @@ Legend: ✅ done · 🚧 in progress · ⬜ not started
 
 - [x] `refine(rawPrompt)` returns `{ refined, diff, explanations, report }` for the three passes
 - [x] All golden fixtures pass; intent-preservation property tests pass
-- [ ] OpenCode loads the skill and the skill contract matches actual behavior
+- [x] OpenCode loads the skill and the skill contract matches actual behavior (discovery + frontmatter verified on 1.18.5; SKILL.md status updated to M1)
 - [ ] `CONTRIBUTING.md` setup instructions verified by a contributor who didn't write them
 
 ---

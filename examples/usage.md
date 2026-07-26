@@ -6,12 +6,33 @@
 
 ## 1. As an OpenCode Skill (primary)
 
-**Install** _(verification pending — see [open-questions.md Q6](../docs/open-questions.md))_:
+**Install** _(verified on OpenCode 1.18.5 — smoke test 2026-07-26)_:
 
+```bash
+# Global (available in every project):
+mkdir -p ~/.config/opencode/skills/prompt-refiner
+cp SKILL.md ~/.config/opencode/skills/prompt-refiner/SKILL.md
+
+# Or per-project (committed to the repo):
+mkdir -p .opencode/skills/prompt-refiner
+cp SKILL.md .opencode/skills/prompt-refiner/SKILL.md
+
+# Verify OpenCode discovered it:
+opencode debug skill
+# → lists { "name": "prompt-refiner", "location": ".../skills/prompt-refiner/SKILL.md" }
 ```
-# Planned: copy or symlink this repo's SKILL.md into your OpenCode skills directory,
-# or install via the OpenCode skill registry once published.
-```
+
+Restart OpenCode after installing — config-time files are not hot-reloaded.
+
+### Smoke test results (M1, OpenCode 1.18.5)
+
+| Check                                                      | Result                                                                                                                                          |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Discovery from `~/.config/opencode/skills/<name>/SKILL.md` | ✅ loads, via `opencode debug skill`                                                                                                            |
+| Frontmatter `name` matches folder name                     | ✅ required — `prompt-refiner` in `prompt-refiner/`                                                                                             |
+| Frontmatter `description` present                          | ✅ required — skills without one are filtered out and never surfaced                                                                            |
+| `skill/` vs `skills/` directory name                       | both accepted (`.opencode/skill(s)/`, `~/.config/opencode/skill(s)/`)                                                                           |
+| Live invocation in a chat session                          | ⬜ not verified — requires a configured model provider (no credentials in the test environment); the discovery contract above is what M1 needed |
 
 **Invoke:** the skill activates when OpenCode detects a raw request that would benefit from refinement, or when you ask for it explicitly:
 

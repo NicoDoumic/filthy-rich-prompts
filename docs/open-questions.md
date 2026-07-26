@@ -44,13 +44,17 @@ Honest design debt. These are the problems we have **not** solved, stated plainl
 
 **Decide by:** M2 (diagnostics) / M5 (redaction pass).
 
-## Q6. How exactly does OpenCode load skills?
+## Q6. How exactly does OpenCode load skills? ✅ RESOLVED (M1, 2026-07-26)
 
-**Why it's hard.** Our SKILL.md follows the Agent Skills convention (YAML frontmatter + markdown body), but OpenCode's exact discovery paths, frontmatter field support, invocation semantics, and version compatibility are integration details we must verify against a live OpenCode install — assumptions here invalidate the skill contract itself.
+**Resolution.** Smoke-tested against OpenCode 1.18.5 (see `examples/usage.md` for the full matrix):
 
-**Current leaning.** First task of Phase 1 M1: a manual smoke test matrix (install paths, field support, invocation), documented in `examples/usage.md`, with SKILL.md adjusted to reality. Until then SKILL.md is a _proposed_ contract.
+- **Discovery:** the loader scans `**/SKILL.md` in `.opencode/skill(s)/<name>/` (project) and `~/.config/opencode/skill(s)/<name>/` (global); both `skill` and `skills` dirnames work. Additional locations can be registered via `skills.paths` / `skills.urls` in `opencode.json`.
+- **Frontmatter contract:** `name` is required, kebab-case ≤64 chars, and must match the folder name; `description` is effectively required — skills without one are filtered out and never surfaced to the model. Optional: `license`, `compatibility`, `metadata`.
+- **Verification command:** `opencode debug skill` lists discovered skills — our `prompt-refiner` appears with its full description.
+- **Hot-reload:** none — restart OpenCode after installing or changing a skill.
+- **Not verified:** live invocation inside a chat session (needs a configured model provider; no credentials in the test environment). Discovery + frontmatter parsing — the integration surface M1 needed — are confirmed.
 
-**Decide by:** M1 exit (it's an exit criterion).
+Our SKILL.md was already conformant; no contract changes were required, only the status note (updated to M1 reality).
 
 ## Q7. Interactive clarification: where do answers live?
 
