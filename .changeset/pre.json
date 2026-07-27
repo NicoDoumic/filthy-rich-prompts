@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "filthy-rich-prompts": "0.1.0"
+  },
+  "changesets": [
+    "late-pandas-hook"
+  ]
+}
