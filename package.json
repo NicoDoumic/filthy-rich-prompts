@@ -28,6 +28,7 @@
     "typecheck": "tsc --noEmit",
     "check:deps": "node scripts/check-deps.mjs",
     "smoke:pack": "node scripts/smoke-pack.mjs",
+    "smoke:plugin": "node scripts/smoke-plugin.mjs",
     "changeset": "changeset",
     "version": "changeset version",
     "release": "pnpm build && changeset publish --provenance"

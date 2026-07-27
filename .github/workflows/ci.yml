@@ -57,3 +57,6 @@ jobs:
 
       - name: Package smoke test
         run: pnpm smoke:pack
+
+      - name: Plugin bundle smoke test
+        run: pnpm smoke:plugin
