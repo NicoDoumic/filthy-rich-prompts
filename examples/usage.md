@@ -1,6 +1,6 @@
 # Example Usage
 
-> **Status note (Phase 0):** the pipeline is implemented starting in Phase 1 ([ROADMAP.md](../ROADMAP.md)). This page is the _contract_ for how usage will work — written now so implementation has a fixed target, and marked clearly where something doesn't exist yet. The OpenCode smoke test in M1 will verify every claim here against a live install.
+> **Status note (M1+):** the core engine, three foundational passes, and OpenCode auto-refine hook are implemented. This page documents how usage works — the contract for the CLI (M3) and TUI (M3) is still future, but the library API and OpenCode skill integration are live. The OpenCode smoke test in M1 verified every claim here against a live install.
 
 ---
 

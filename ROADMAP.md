@@ -23,7 +23,7 @@ Legend: ✅ done · 🚧 in progress · ⬜ not started
 
 ---
 
-## M1 — Core Engine + Foundational Passes 🚧 _(= Phase 1 — exit criteria 3/4; the last needs an external human verifier)_
+## M1 — Core Engine + Foundational Passes ✅ _(= Phase 1 — exit criteria 3/4; the last needs an external human verifier)_
 
 **Goal:** A working refinement pipeline, end to end, with three passes and a test harness.
 

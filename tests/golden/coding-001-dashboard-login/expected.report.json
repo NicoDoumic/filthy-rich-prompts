@@ -14,9 +14,57 @@
       "status": "applied"
     },
     {
+      "id": "missing-context-detection",
+      "phase": 20,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "context-enrichment",
+      "phase": 30,
+      "kind": "transformation",
+      "status": "applied"
+    },
+    {
+      "id": "constraint-extraction",
+      "phase": 40,
+      "kind": "transformation",
+      "status": "applied"
+    },
+    {
+      "id": "goal-role-extraction",
+      "phase": 40,
+      "kind": "transformation",
+      "status": "applied"
+    },
+    {
       "id": "structure",
       "phase": 50,
       "kind": "transformation",
+      "status": "applied"
+    },
+    {
+      "id": "task-decomposition",
+      "phase": 50,
+      "kind": "transformation",
+      "status": "applied"
+    },
+    {
+      "id": "output-format-inference",
+      "phase": 50,
+      "kind": "transformation",
+      "status": "applied"
+    },
+    {
+      "id": "final-generation",
+      "phase": 60,
+      "kind": "transformation",
+      "status": "applied"
+    },
+    {
+      "id": "verification",
+      "phase": 70,
+      "kind": "detection",
       "status": "applied"
     }
   ],
@@ -83,22 +131,74 @@
       "suggestions": [
         "consider whether the tasks are separable"
       ]
+    },
+    {
+      "pass": "missing-context-detection",
+      "severity": "info",
+      "code": "MISSING_VERSION",
+      "message": "no version numbers detected — behavior may vary across versions",
+      "suggestions": [
+        "include relevant version numbers (language, framework, library, OS)"
+      ]
+    },
+    {
+      "pass": "missing-context-detection",
+      "severity": "info",
+      "code": "MISSING_AUDIENCE",
+      "message": "no target audience specified — tone and depth default to general",
+      "suggestions": [
+        "specify who this is for (beginners, experts, executives, technical team)"
+      ]
+    },
+    {
+      "pass": "missing-context-detection",
+      "severity": "info",
+      "code": "MISSING_CONSTRAINTS",
+      "message": "no explicit constraints or requirements detected",
+      "suggestions": [
+        "list any constraints (time, budget, performance, compatibility, security)"
+      ]
+    },
+    {
+      "pass": "missing-context-detection",
+      "severity": "info",
+      "code": "MISSING_OUTPUT_FORMAT",
+      "message": "no desired output format specified — the response structure is left to the model",
+      "suggestions": [
+        "specify the desired output format (list, table, code, prose, JSON, markdown)"
+      ]
+    },
+    {
+      "pass": "verification",
+      "severity": "info",
+      "code": "INTENT_VERIFIED",
+      "message": "intent \"coding\" preserved through the pipeline",
+      "suggestions": [
+        "hey the app is kinda slow when I open the dashboard and sometimes it just spins forever lol. can you make it faster?"
+      ]
     }
   ],
   "explanations": [
     {
-      "pass": "structure",
-      "change": "added a `# Task` heading",
-      "reason": "an explicit anchor makes the request scannable for the executing model",
-      "before": "hey the app is kinda slow when I open the dashboard and some",
-      "after": "# Task"
+      "pass": "context-enrichment",
+      "change": "extracted 1 context sentence into a `## Context` section",
+      "reason": "context buried in prose is routinely missed by executors; extracting it improves reliability",
+      "after": "## Context",
+      "before": "also maybe fix the login bug where it logs me out. using rea"
     },
     {
-      "pass": "structure",
-      "change": "relocated 1 context sentence into a `## Context` section",
-      "reason": "context buried in prose is routinely missed by executors; it belongs in a canonical position",
-      "before": "also maybe fix the login bug where it logs me out. using rea",
-      "after": "## Context"
+      "pass": "context-enrichment",
+      "change": "added 2 labeled assumptions about inferred context",
+      "reason": "assumptions are marked so the user can verify them — never silently merged",
+      "before": "Frontend framework: [assumption: react]",
+      "after": "[assumption: ...]"
+    },
+    {
+      "pass": "constraint-extraction",
+      "change": "extracted 1 implicit constraint into a `## Constraints` section",
+      "reason": "implicit constraints are routinely missed by executors; making them explicit improves reliability",
+      "before": "Performance: make it faster",
+      "after": "## Constraints"
     }
   ],
   "assumptions": []

@@ -14,9 +14,57 @@
       "status": "applied"
     },
     {
+      "id": "missing-context-detection",
+      "phase": 20,
+      "kind": "detection",
+      "status": "applied"
+    },
+    {
+      "id": "context-enrichment",
+      "phase": 30,
+      "kind": "transformation",
+      "status": "applied"
+    },
+    {
+      "id": "constraint-extraction",
+      "phase": 40,
+      "kind": "transformation",
+      "status": "applied"
+    },
+    {
+      "id": "goal-role-extraction",
+      "phase": 40,
+      "kind": "transformation",
+      "status": "applied"
+    },
+    {
       "id": "structure",
       "phase": 50,
       "kind": "transformation",
+      "status": "applied"
+    },
+    {
+      "id": "task-decomposition",
+      "phase": 50,
+      "kind": "transformation",
+      "status": "applied"
+    },
+    {
+      "id": "output-format-inference",
+      "phase": 50,
+      "kind": "transformation",
+      "status": "applied"
+    },
+    {
+      "id": "final-generation",
+      "phase": 60,
+      "kind": "transformation",
+      "status": "applied"
+    },
+    {
+      "id": "verification",
+      "phase": 70,
+      "kind": "detection",
       "status": "applied"
     }
   ],
@@ -30,6 +78,69 @@
       "severity": "info",
       "code": "INTENT_UNKNOWN",
       "message": "no category cues detected — treating the request as uncategorized"
+    },
+    {
+      "pass": "missing-context-detection",
+      "severity": "warning",
+      "code": "MISSING_ENVIRONMENT",
+      "message": "no environment or platform information detected",
+      "suggestions": [
+        "specify the environment (OS, browser, runtime, device) the task applies to"
+      ]
+    },
+    {
+      "pass": "missing-context-detection",
+      "severity": "info",
+      "code": "MISSING_VERSION",
+      "message": "no version numbers detected — behavior may vary across versions",
+      "suggestions": [
+        "include relevant version numbers (language, framework, library, OS)"
+      ]
+    },
+    {
+      "pass": "missing-context-detection",
+      "severity": "warning",
+      "code": "MISSING_SCOPE",
+      "message": "no scope or boundaries defined — the task may expand beyond what you intended",
+      "suggestions": [
+        "define what is in scope and (optionally) what is explicitly out of scope"
+      ]
+    },
+    {
+      "pass": "missing-context-detection",
+      "severity": "info",
+      "code": "MISSING_AUDIENCE",
+      "message": "no target audience specified — tone and depth default to general",
+      "suggestions": [
+        "specify who this is for (beginners, experts, executives, technical team)"
+      ]
+    },
+    {
+      "pass": "missing-context-detection",
+      "severity": "info",
+      "code": "MISSING_CONSTRAINTS",
+      "message": "no explicit constraints or requirements detected",
+      "suggestions": [
+        "list any constraints (time, budget, performance, compatibility, security)"
+      ]
+    },
+    {
+      "pass": "missing-context-detection",
+      "severity": "warning",
+      "code": "MISSING_REPRODUCTION",
+      "message": "no reproduction steps — the executor cannot verify the issue",
+      "suggestions": [
+        "provide step-by-step reproduction instructions for any bug or unexpected behavior"
+      ]
+    },
+    {
+      "pass": "missing-context-detection",
+      "severity": "info",
+      "code": "MISSING_OUTPUT_FORMAT",
+      "message": "no desired output format specified — the response structure is left to the model",
+      "suggestions": [
+        "specify the desired output format (list, table, code, prose, JSON, markdown)"
+      ]
     }
   ],
   "explanations": [],

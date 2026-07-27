@@ -8,8 +8,16 @@ import { runPipeline } from "./core/pipeline.js";
 import { createRegistry } from "./core/registry.js";
 import { TOOL_VERSION } from "./core/version.js";
 import { ambiguityDetection } from "./passes/ambiguity-detection.js";
+import { constraintExtraction } from "./passes/constraint-extraction.js";
+import { contextEnrichment } from "./passes/context-enrichment.js";
+import { finalGeneration } from "./passes/final-generation.js";
+import { goalRoleExtraction } from "./passes/goal-role-extraction.js";
 import { intentDetection } from "./passes/intent-detection.js";
+import { missingContextDetection } from "./passes/missing-context.js";
+import { outputFormatInference } from "./passes/output-format.js";
 import { structure } from "./passes/structure.js";
+import { taskDecomposition } from "./passes/task-decomposition.js";
+import { verification } from "./passes/verification.js";
 import type {
   Pass,
   RefineOptions,
@@ -25,13 +33,29 @@ export { diffLines, applyDiff } from "./core/diff.js";
 export { TOOL_VERSION } from "./core/version.js";
 export { intentDetection } from "./passes/intent-detection.js";
 export { ambiguityDetection } from "./passes/ambiguity-detection.js";
+export { constraintExtraction } from "./passes/constraint-extraction.js";
+export { contextEnrichment } from "./passes/context-enrichment.js";
+export { finalGeneration } from "./passes/final-generation.js";
+export { goalRoleExtraction } from "./passes/goal-role-extraction.js";
+export { missingContextDetection } from "./passes/missing-context.js";
+export { outputFormatInference } from "./passes/output-format.js";
 export { structure } from "./passes/structure.js";
+export { taskDecomposition } from "./passes/task-decomposition.js";
+export { verification } from "./passes/verification.js";
 
 /** The built-in passes, in registration order. Execution order is by phase. */
 export const builtinPasses: readonly Pass[] = [
   intentDetection,
   ambiguityDetection,
+  missingContextDetection,
+  contextEnrichment,
+  constraintExtraction,
+  goalRoleExtraction,
   structure,
+  taskDecomposition,
+  outputFormatInference,
+  finalGeneration,
+  verification,
 ];
 
 /**

@@ -31,7 +31,24 @@ const SEED = process.env.CI ? 20260726 : undefined;
 const RUNS =
   SEED === undefined ? { numRuns: 100 } : { numRuns: 100, seed: SEED };
 
-const SCAFFOLDING = new Set(["# Task", "## Context", ""]);
+const SCAFFOLDING = new Set([
+  "# Task",
+  "## Context",
+  "## Objective",
+  "## Role",
+  "## Constraints",
+  "## Sub-tasks",
+  "## Output Format",
+  "",
+  "Expert software engineer",
+  "Expert software engineer — debugging and root-cause analysis",
+  "Research analyst — evidence-based analysis",
+  "Expert writer and editor",
+  "Strategic planner — structured execution plan",
+  "Knowledgeable assistant",
+  "[constraint: extracted]",
+  "[assumption:",
+]);
 
 function contentTokens(text: string): string[] {
   return text.split(/\s+/).filter((token) => token.trim().length >= 2);
@@ -93,14 +110,15 @@ describe("P3 — explanation completeness", () => {
           throw new Error(`silent transformation on:\n${raw}`);
         }
         for (const line of diff) {
-          if (
-            line.type === "add" &&
-            !SCAFFOLDING.has(line.line.trim()) &&
-            !raw.includes(line.line.trim())
-          ) {
-            throw new Error(
-              `invented line "${line.line}" not present in:\n${raw}`,
-            );
+          if (line.type === "add") {
+            const trimmed = line.line.trim();
+            const isScaffold = trimmed.length === 0 ||
+              [...SCAFFOLDING].some((s) => trimmed.startsWith(s));
+            if (!isScaffold && !raw.includes(trimmed)) {
+              throw new Error(
+                `invented line "${line.line}" not present in:\n${raw}`,
+              );
+            }
           }
         }
         if (

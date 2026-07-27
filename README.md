@@ -52,8 +52,6 @@ Three candidates were considered:
 
 Two names are used on purpose: **`filthy-rich-prompts`** is the brand (repo, package, CLI), while **`prompt-refiner`** is the technical skill name (SKILL.md frontmatter, config keys) — what OpenCode displays and what users type.
 
-> ⚠️ **Before publishing:** the original working directory was named `filthy-rich-promts` (typo). Rename the folder to `filthy-rich-prompts` before `git init` and pushing to GitHub, so the remote matches the brand everywhere.
-
 ## Design Philosophy
 
 The short version — the full text lives in [docs/design-philosophy.md](docs/design-philosophy.md):
@@ -144,7 +142,7 @@ Same intent. Same information. Objectively better instructions.
 ├── LICENSE               # MIT
 ├── docs/                 # All design specifications (start with architecture.md)
 ├── examples/             # Usage guide + worked before/after transformations
-├── src/                  # Phase 1 code home (module skeleton only, no code yet)
+├── src/                  # Core engine, built-in passes, and OpenCode integration
 ├── tests/                # Golden fixtures land here in Phase 1
 └── .github/              # Issue forms, PR template, label taxonomy
 ```
@@ -171,7 +169,7 @@ Same intent. Same information. Objectively better instructions.
 
 ## Status
 
-**v0.1.0 — M1 shipped.** The core engine and three foundational passes (intent-detection, ambiguity-detection, structure) are implemented, tested (77 tests, property invariants P1–P5, coverage gates), and verified to load in OpenCode 1.18.5. The path to a public 1.0 lives in **[PLAN.md](PLAN.md)** — including the auto-refine toggle that routes every OpenCode prompt through the refiner first. Design specs:
+**v0.1.0 — M1 shipped.** The core engine and three foundational passes (intent-detection, ambiguity-detection, structure) are implemented, tested (100 tests, property invariants P1–P5, coverage gates), and verified to load in OpenCode 1.18.5. The path to a public 1.0 lives in **[PLAN.md](PLAN.md)** — including the auto-refine toggle that routes every OpenCode prompt through the refiner first. Design specs:
 
 | Topic                      | Doc                                                                                             |
 | -------------------------- | ----------------------------------------------------------------------------------------------- |

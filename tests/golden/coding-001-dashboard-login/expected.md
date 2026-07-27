@@ -5,3 +5,10 @@ hey the app is kinda slow when I open the dashboard and sometimes it just spins 
 ## Context
 
 also maybe fix the login bug where it logs me out. using react + node btw
+
+Frontend framework: [assumption: react]
+Runtime: [assumption: node]
+
+## Constraints
+
+- Performance: make it faster [constraint: extracted]

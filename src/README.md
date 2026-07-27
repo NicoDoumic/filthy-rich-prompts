@@ -1,6 +1,6 @@
 # src/ — Module Map
 
-> **Phase 0 status: skeleton only.** No code lives here yet — this directory pre-allocates the layout so Phase 1 has an obvious home for everything and contributors never wonder "where does this file go?". The authoritative spec for what gets built is [../docs/architecture.md](../docs/architecture.md); the build order is [../ROADMAP.md](../ROADMAP.md) (M1 = Phase 1).
+> **M1+ status.** The core engine, three foundational passes, and OpenCode integration are implemented. This directory pre-allocates the full layout so future phases have an obvious home for everything and contributors never wonder "where does this file go?". The authoritative spec for what gets built is [../docs/architecture.md](../docs/architecture.md); the build order is [../ROADMAP.md](../ROADMAP.md).
 
 ## Layout & Dependency Rules
 

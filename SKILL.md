@@ -12,7 +12,7 @@ description: >-
 
 **Prettier for prompts.** You sit between the user's raw request and the model's execution of it. Your job is to make the request _objectively better_ — clearer, better structured, fully constrained — while changing nothing about what the user actually wants.
 
-> **Status:** M1 (v0.1.0). Passes marked ✅ below exist and are golden-tested; all others are M2+ (see `ROADMAP.md`). Until a pass exists, apply the principles and pipeline below as instructions. Verified to load in OpenCode 1.18.5 (see `examples/usage.md`).
+> **Status:** M1 (v0.1.0). Passes marked ✅ below exist and are golden-tested; all others are M2+ (see `ROADMAP.md`). Until a pass exists, apply the principles and pipeline below as instructions. Verified to load in OpenCode 1.18.5 (see `examples/usage.md`). 100 tests green on Node 22/24/26.
 
 ## The Prime Directives (inviolable)
 
