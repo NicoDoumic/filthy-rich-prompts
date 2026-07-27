@@ -27,6 +27,11 @@ src/
 │   │                #   Discovers packages listed in config `plugins:`, validates peer ranges,
 │   │                #   enforces requiresLLM/requiresNetwork declarations (docs/plugin-api.md)
 │
+├── integrations/    # Host-integrations (added in the v0.2.0-next.0 pre-release).
+│   │                #   opencode-plugin.ts — self-contained OpenCode hook (chat.messages.transform)
+│   │                #   refine-outgoing.ts — pure outgoing-prompt logic (no OpenCode types)
+│   │                #   min-config.ts      — MINIMAL autoRefine-only config (M2 subset, see file docs)
+│
 ├── reporting/       # Renderers: text/markdown/JSON output of RefinementReport, diff views.
 │                    #   Depends on core. Shared by CLI and TUI — one renderer, two shells.
 │

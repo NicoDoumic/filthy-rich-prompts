@@ -13,8 +13,8 @@
  * - Any engine failure → original text, unchanged (architecture §8:
  *   interception must never be worse than no interception).
  */
-import { refine } from '../index.js';
-import type { RefineResult } from '../core/types.js';
+import { refine } from "../index.js";
+import type { RefineResult } from "../core/types.js";
 
 export interface RefineOutgoingOptions {
   readonly autoRefine: boolean;
@@ -32,7 +32,8 @@ export interface RefineOutgoingResult {
 /** The injected engine signature (defaults to the real refine; tests stub it). */
 export type RefineFn = (raw: string) => Promise<RefineResult>;
 
-export const OPEN_QUESTIONS_HEADING = '## Open questions (answer before proceeding)';
+export const OPEN_QUESTIONS_HEADING =
+  "## Open questions (answer before proceeding)";
 
 /**
  * Refines one outgoing prompt if auto-refine is enabled.
@@ -50,13 +51,15 @@ export async function refineOutgoing(
     if (result.refined === rawText) return { text: rawText, changed: false };
 
     let text = result.refined;
-    const blocking = result.report.diagnostics.filter((d) => d.severity === 'blocking');
+    const blocking = result.report.diagnostics.filter(
+      (d) => d.severity === "blocking",
+    );
     if (blocking.length > 0) {
       text =
         text.trimEnd() +
         `\n\n${OPEN_QUESTIONS_HEADING}\n\n` +
-        blocking.map((d) => `- ${d.message}`).join('\n') +
-        '\n';
+        blocking.map((d) => `- ${d.message}`).join("\n") +
+        "\n";
     }
 
     const changes = result.explanations.length;
@@ -64,7 +67,7 @@ export async function refineOutgoing(
     return {
       text,
       changed: true,
-      note: `refined by prompt-refiner (${changes} explanation${changes === 1 ? '' : 's'}, ${findings} diagnostic${findings === 1 ? '' : 's'})`,
+      note: `refined by prompt-refiner (${changes} explanation${changes === 1 ? "" : "s"}, ${findings} diagnostic${findings === 1 ? "" : "s"})`,
     };
   } catch {
     // Failure doctrine: the original prompt always goes through.

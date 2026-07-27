@@ -16,8 +16,8 @@
  * `["./.opencode/plugin/opencode-plugin.js", { "autoRefine": true }]` in
  * opencode.json → refine.config.json `autoRefine` → default OFF.
  */
-import { loadMinConfig } from './min-config.js';
-import { refineOutgoing } from './refine-outgoing.js';
+import { loadMinConfig } from "./min-config.js";
+import { refineOutgoing } from "./refine-outgoing.js";
 
 /** Plugin options tuple form: `["<plugin>", { "autoRefine": true }]`. */
 export interface PromptRefinerPluginOptions {
@@ -39,12 +39,15 @@ interface TransformOutput {
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
-  return value !== null && typeof value === 'object';
+  return value !== null && typeof value === "object";
 }
 
 /** Refines one text-bearing part or string in place. Returns nothing; mutates the container. */
-async function transformMessage(message: ChatMessage, autoRefine: boolean): Promise<void> {
-  if (typeof message.content === 'string') {
+async function transformMessage(
+  message: ChatMessage,
+  autoRefine: boolean,
+): Promise<void> {
+  if (typeof message.content === "string") {
     const result = await refineOutgoing(message.content, { autoRefine });
     message.content = result.text;
     return;
@@ -56,7 +59,11 @@ async function transformMessage(message: ChatMessage, autoRefine: boolean): Prom
       : null;
   if (parts === null) return;
   for (const part of parts) {
-    if (isRecord(part) && part.type === 'text' && typeof part.text === 'string') {
+    if (
+      isRecord(part) &&
+      part.type === "text" &&
+      typeof part.text === "string"
+    ) {
       const result = await refineOutgoing(part.text, { autoRefine });
       part.text = result.text;
     }
@@ -71,10 +78,11 @@ export default async function promptRefinerPlugin(
   _input: unknown,
   options?: PromptRefinerPluginOptions,
 ) {
-  const autoRefine = options?.autoRefine ?? loadMinConfig(process.cwd()).autoRefine;
+  const autoRefine =
+    options?.autoRefine ?? loadMinConfig(process.cwd()).autoRefine;
 
   return {
-    'experimental.chat.messages.transform': async (
+    "experimental.chat.messages.transform": async (
       _hookInput: unknown,
       output: TransformOutput,
     ): Promise<void> => {
@@ -83,7 +91,7 @@ export default async function promptRefinerPlugin(
       const messages = output.messages as ChatMessage[];
       const lastUser = [...messages]
         .reverse()
-        .find((message) => isRecord(message) && message.role === 'user');
+        .find((message) => isRecord(message) && message.role === "user");
       if (lastUser === undefined) return;
       try {
         await transformMessage(lastUser, autoRefine);

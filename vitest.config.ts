@@ -13,7 +13,11 @@ export default defineConfig({
       // all:false — with all:true (default), v8 adds glob-matched files that
       // were never loaded under a second, phantom 0% entry per file.
       all: false,
-      include: ["src/core/**/*.ts", "src/passes/**/*.ts", "src/integrations/**/*.ts"],
+      include: [
+        "src/core/**/*.ts",
+        "src/passes/**/*.ts",
+        "src/integrations/**/*.ts",
+      ],
       exclude: ["src/core/types.ts", "**/*.test.ts"],
       // testing-strategy §2: ≥95% lines on core, ≥90% on passes. The global
       // perFile floor is 90; core is expected to sit at ≥95 and is reviewed

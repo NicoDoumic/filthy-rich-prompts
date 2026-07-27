@@ -2,7 +2,9 @@
 
 > **This is the single authoritative plan.** Everything required to take filthy-rich-prompts from its current state to a public, installable, used-in-the-real-world 1.0 — phases, exit criteria, and the open items that must not be lost. ROADMAP.md remains the milestone record; this file is the actionable path. When the two ever disagree, this file wins and the other is updated.
 
-Last updated: 2026-07-26 · Current state: **v0.1.0 tagged, M1 shipped**
+Last updated: 2026-07-26 · Current state: **v0.1.0 (M1) + pre-release v0.2.0-next.0 (auto-refine hook)**
+
+> **Pre-release note (narrow cut, deliberately NOT M2):** v0.2.0-next.0 adds the OpenCode auto-refine hook (`experimental.chat.messages.transform`, self-contained `dist/opencode-plugin.js`, minimal `autoRefine` toggle, default off). Deliberately NOT included: CLI, TUI, full file-config precedence, plugin trust-tiers, benchmarking, i18n. **Phase-70 verify pass is not in this cut — explicit reason:** its job is verifying M2's richer transformations; with `structure` as the only mutation, its marginal value over property tests P1/P3 is low and shipping it now would fake a semantic gate that doesn't exist yet. It stays scheduled in Phase 2 (§4.3), and `structure` remains publicly labeled PROVISIONAL against the Tier 0 gate.
 
 ---
 

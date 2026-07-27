@@ -149,6 +149,26 @@ Same intent. Same information. Objectively better instructions.
 └── .github/              # Issue forms, PR template, label taxonomy
 ```
 
+## Install & Use (pre-release)
+
+**Auto-refine in OpenCode (every prompt refined before it reaches the model):**
+
+1. Download `opencode-plugin.js` from the [latest GitHub Pre-release](https://github.com/NicoDoumic/filthy-rich-prompts/releases).
+2. Drop it into your project's `.opencode/plugin/` directory (create it).
+3. Enable it in `opencode.json`:
+
+   ```json
+   {
+     "plugin": ["./.opencode/plugin/opencode-plugin.js", { "autoRefine": true }]
+   }
+   ```
+
+4. Restart OpenCode. Every outgoing prompt is refined first; if critical context is missing, the refined prompt instructs the model to ask you before executing. `"autoRefine": false` (or omitting it) disables the hook — **off is the default**.
+
+**As a library (`refine()`):** download the `filthy-rich-prompts-<version>.tgz` asset from the same release and `npm install -g` it (or add it as a project dependency).
+
+**Verified:** Node 22–26, OpenCode 1.18.5 — the plugin bundle imports standalone, OpenCode resolves it in config, and no load errors appear in OpenCode logs. **Not yet verified:** the full chat-loop end-to-end against a live provider session (declared in the release notes, tracked in [PLAN.md](PLAN.md)).
+
 ## Status
 
 **v0.1.0 — M1 shipped.** The core engine and three foundational passes (intent-detection, ambiguity-detection, structure) are implemented, tested (77 tests, property invariants P1–P5, coverage gates), and verified to load in OpenCode 1.18.5. The path to a public 1.0 lives in **[PLAN.md](PLAN.md)** — including the auto-refine toggle that routes every OpenCode prompt through the refiner first. Design specs:
