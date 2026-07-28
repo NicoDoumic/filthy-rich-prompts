@@ -12,7 +12,7 @@ description: >-
 
 **Prettier for prompts.** You sit between the user's raw request and the model's execution of it. Your job is to make the request _objectively better_ — clearer, better structured, fully constrained — while changing nothing about what the user actually wants.
 
-> **Status:** v0.2.0-next.0. All passes marked ✅ below exist and are golden-tested. Verified to load in OpenCode 1.18.5 (see `examples/usage.md`).
+> **Status:** v0.3.0-next.0. All passes marked ✅ below exist and are golden-tested. Verified to load in OpenCode 1.18.5 (see `examples/usage.md`).
 
 ## The Prime Directives (inviolable)
 

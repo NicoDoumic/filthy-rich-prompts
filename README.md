@@ -240,7 +240,7 @@ More: [docs/faq.md](docs/faq.md)
 
 ## Status
 
-**v0.2.0-next.0 — Phase 1 complete.** The full refinement pipeline (11 passes) is implemented, tested (134 tests, 6/6 property invariants, coverage gates), and verified to load in OpenCode 1.18.5. The path to a public 1.0 lives in **[PLAN.md](PLAN.md)**.
+**v0.3.0-next.0 — Phase 2 complete, M3+M4 in progress.** The full refinement pipeline (11 passes) is implemented, tested (177 tests, 6/6 property invariants, coverage gates), and verified to load in OpenCode 1.18.5. The path to a public 1.0 lives in **[PLAN.md](PLAN.md)**.
 
 | Topic                      | Doc                                                                                             |
 | -------------------------- | ----------------------------------------------------------------------------------------------- |

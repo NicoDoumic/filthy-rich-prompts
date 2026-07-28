@@ -1,6 +1,6 @@
 # v1.0 Release Readiness Report
 
-**Project:** filthy-rich-prompts · **Date:** 2026-07-28 · **Version:** v0.2.0-next.0
+**Project:** filthy-rich-prompts · **Date:** 2026-07-28 · **Version:** v0.3.0-next.0
 
 ---
 

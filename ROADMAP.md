@@ -66,7 +66,7 @@ Legend: ✅ done · 🚧 in progress · ⬜ not started
 **Scope:**
 
 - ✅ All core passes implemented (moved from M1 scope — completed)
-- ✅ Auto-refine plugin + toggle pre-released (v0.2.0-next.0)
+- ✅ Auto-refine plugin + toggle v0.3.0-next.0 (M2 complete: config loader, mode support, frp CLI, benchmarks)
 - ⬜ Config loading (`refine.config.json` per [docs/configuration.md](docs/configuration.md)) — full schema, not just autoRefine subset
 - ⬜ Mode support: beginner / expert / silent behaviorally distinct (interactive deferred to M3 with the TUI)
 - ⬜ First 50 benchmark fixtures ([docs/benchmarking.md](docs/benchmarking.md))

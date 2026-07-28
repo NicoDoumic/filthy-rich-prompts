@@ -2,7 +2,7 @@
 
 > **This is the single authoritative plan.** Everything required to take filthy-rich-prompts from its current state to a public, installable, used-in-the-real-world 1.0 — phases, exit criteria, and the open items that must not be lost. ROADMAP.md remains the milestone record; this file is the actionable path. When the two ever disagree, this file wins and the other is updated.
 
-Last updated: 2026-07-28 · Current state: **v0.2.0-next.0 (Phase 1 complete)**
+Last updated: 2026-07-28 · Current state: **v0.3.0-next.0 (Phase 2 complete, M3+M4 in progress)**
 
 > **Phase 1 completion note:** All 11 core passes are implemented (the 3 M1 foundational passes plus the 8 remaining heuristic passes), tested (134 tests, 6/6 property invariants, coverage gates), and verified to load in OpenCode 1.18.5. Deliberately NOT included in this cut: CLI, TUI, full file-config precedence, plugin trust-tiers, benchmarking, i18n. The Phase-70 verify pass is heuristic-only — its semantic/judged version lands with M4's harness. `structure` remains publicly labeled PROVISIONAL against the Tier 0 gate.
 
