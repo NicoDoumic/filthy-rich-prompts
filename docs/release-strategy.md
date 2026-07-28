@@ -1,6 +1,6 @@
 # Release Strategy
 
-> Status: **Active** — first release (`v0.1.0`) is the Phase 1 exit event.
+> Status: **Active** — `v0.2.0-next.0` is the current pre-release. Full npm publish awaits `NPM_TOKEN` configuration.
 
 Releases are boring by design: automated, reversible, and announced only when there's something to say.
 
@@ -67,9 +67,6 @@ Every public announcement follows the house style: lead with a real before/after
 - `0.x` era: latest minor only — no backports (moving forward is cheaper than maintaining branches at this stage).
 - Post-1.0: latest major fully supported; previous major receives **security and intent-preservation fixes for 6 months** after the new major ships.
 
-## 7. First Release Plan (`v0.1.0`)
+## 7. First Release History
 
-1. Phase 1 exit criteria met ([ROADMAP.md](../ROADMAP.md) M1)
-2. `npm publish` of `filthy-rich-prompts@0.1.0` with provenance
-3. GitHub Release `v0.1.0` titled "Phase 1: core engine + foundational passes"
-4. No marketing push — 0.1.0 is for early adopters and OpenCode integration validation; the public push is M5/1.0
+`v0.1.0` was tagged at Phase 1 completion but never published to npm (`NPM_TOKEN` not yet configured). The first published release will be a `v0.x` pre-release via `changeset publish`. The current release is `v0.2.0-next.0`.

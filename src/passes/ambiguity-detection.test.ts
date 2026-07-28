@@ -1,13 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { initialContext } from "../core/context.js";
-import type { PassContext, ResolvedConfig } from "../core/types.js";
+import { ctxOf } from "../../tests/helpers/ctxOf.js";
 import { ambiguityDetection } from "./ambiguity-detection.js";
-
-const config: ResolvedConfig = { passes: {}, toolVersion: "0.0.0-test" };
-
-function ctxOf(prompt: string): PassContext {
-  return initialContext(prompt, config);
-}
 
 async function codesFor(prompt: string): Promise<string[]> {
   const result = await ambiguityDetection.run(ctxOf(prompt));

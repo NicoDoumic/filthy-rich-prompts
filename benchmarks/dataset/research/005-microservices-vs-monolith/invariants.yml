@@ -1,0 +1,9 @@
+﻿intent_must_contain:
+  - "break up"
+  - "monolith"
+must_not_contain:
+  - "I recommend"
+  - "you should break it up"
+  - "you should keep it"
+  - "the right answer is"
+  - "Docker"

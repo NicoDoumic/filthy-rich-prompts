@@ -1,0 +1,10 @@
+﻿intent_must_contain:
+  - "aws"
+  - "gcp"
+  - "data pipeline"
+must_not_contain:
+  - "I recommend AWS"
+  - "I recommend GCP"
+  - "AWS is the better choice"
+  - "GCP is the better choice"
+  - "the clear winner"

@@ -23,49 +23,58 @@ Legend: ✅ done · 🚧 in progress · ⬜ not started
 
 ---
 
-## M1 — Core Engine + Foundational Passes ✅ _(= Phase 1 — exit criteria 3/4; the last needs an external human verifier)_
+## M1 — Core Engine + All 11 Core Passes ✅ _(exit criteria 3/4; the last needs an external human verifier)_
 
-**Goal:** A working refinement pipeline, end to end, with three passes and a test harness.
+**Goal:** A working refinement pipeline, end to end, with all designed passes and test harness.
 
 **Scope — exactly this, nothing more:**
 
 1. **Package scaffold** ✅ — `package.json`, `tsconfig.json` (strict), ESM, build (`tsup`), vitest, ESLint + Prettier, npm provenance-ready. Zero runtime dependencies in core (enforced by `scripts/check-deps.mjs` in CI).
 2. **Core types** ✅ — `Pass`, `PassContext`, `PassResult`, `Diagnostic`, `Explanation`, `RefinementReport` in `src/core/types.ts`, per [docs/architecture.md](docs/architecture.md) (with the documented D1 metadata deviation).
 3. **Pipeline runner** ✅ — `runPipeline` in `src/core/pipeline.ts`: phase-ordered execution, immutable context snapshots, contract validation, crash isolation.
-4. **Three foundational passes** ✅
-   - `intent-detection` (phase 10, detection) — heuristic classifier: coding / bug-report / research / writing / planning; ties collapse to `unknown`
-   - `ambiguity-detection` (phase 20, detection) — flags vague quantifiers, unresolved referents, implicit constraints, hedges, compound requests (advisory severities only)
-   - `structure` (phase 50, transformation) — canonical section layout under the verbatim-span doctrine, with per-change explanations
-5. **Golden-test harness** ✅ — `tests/golden/` (8 fixtures + harness) run in CI, per [docs/testing-strategy.md](docs/testing-strategy.md) (reduced-fidelity in M1 — see its §3 amendment).
+4. **Ten core passes** ✅
+   - `intent-detection` (phase 10, detection) — heuristic classifier
+   - `ambiguity-detection` (phase 20, detection) — flags vague quantifiers, unresolved referents, hedges, compound requests
+   - `missing-context-detection` (phase 20, detection) — flags absent information
+   - `context-enrichment` (phase 30, transformation) — surfaces and structures existing context
+   - `constraint-extraction` (phase 40, transformation) — implicit → explicit constraints
+   - `goal-role-extraction` (phase 40, transformation) — objective + expert role
+   - `structure` (phase 50, transformation) — canonical section layout with per-change explanations
+   - `output-format-inference` (phase 50, transformation) — infers output format
+   - `task-decomposition` (phase 50, transformation) — splits compound requests
+   - `final-generation` (phase 60, generation) — canonical section ordering
+   - `verification` (phase 70, detection) — intent-preservation & information-loss check
+5. **Golden-test harness** ✅ — `tests/golden/` (8 fixtures + harness) run in CI, per [docs/testing-strategy.md](docs/testing-strategy.md).
 6. **CI** ✅ — `.github/workflows/ci.yml`: lint, format, typecheck, zero-dep guard, unit+golden+property with coverage gates, build, pack smoke; matrix OS × Node {22, 24}. Plus PR-title check and changesets release workflow.
-7. **Verification that OpenCode loads SKILL.md** ✅ — smoke-tested on OpenCode 1.18.5: discovery + frontmatter contract verified via `opencode debug skill`; install steps documented in `examples/usage.md`; Q6 resolved.
+7. **Verification that OpenCode loads SKILL.md** ✅ — smoke-tested on OpenCode 1.18.5: discovery + frontmatter contract verified via `opencode debug skill`; install steps documented; auto-refine plugin hook verified.
 
-**Explicitly out of scope for M1:** CLI, TUI, LLM-powered passes, config file loading, plugins, scoring. (A `--help`-less internal `src/cli/dev.ts` entry for manual testing is allowed but is not the CLI.)
+**Explicitly out of scope for M1:** CLI, TUI, LLM-powered passes, full config file loading, plugins, scoring, benchmark fixtures.
 
 **Exit criteria:**
 
-- [x] `refine(rawPrompt)` returns `{ refined, diff, explanations, report }` for the three passes
-- [x] All golden fixtures pass; intent-preservation property tests pass
-- [x] OpenCode loads the skill and the skill contract matches actual behavior (discovery + frontmatter verified on 1.18.5; SKILL.md status updated to M1)
+- [x] `refine(rawPrompt)` returns `{ refined, diff, explanations, report }` for all passes
+- [x] All golden fixtures pass; intent-preservation property tests pass (134 tests)
+- [x] OpenCode loads the skill and the skill contract matches actual behavior (discovery + frontmatter verified on 1.18.5; SKILL.md status updated)
 - [ ] `CONTRIBUTING.md` setup instructions verified by a contributor who didn't write them
 
 ---
 
-## M2 — OpenCode Integration & the Core Pass Suite ⬜
+## M2 — OpenCode Integration & Config ⬜
 
 **Goal:** The skill is genuinely useful inside OpenCode for the four flagship use cases.
 
 **Scope:**
 
-- Config loading (`refine.config.json` per [docs/configuration.md](docs/configuration.md))
-- Remaining core passes: missing-context detection, constraint extraction, goal/role extraction, output-format inference, task decomposition
-- Mode support: beginner / expert / silent (interactive deferred to M3 with the TUI)
-- Specialized refinements: bug-report generation, specification generation, coding-request optimization
-- First 50 benchmark fixtures ([docs/benchmarking.md](docs/benchmarking.md))
+- ✅ All core passes implemented (moved from M1 scope — completed)
+- ✅ Auto-refine plugin + toggle pre-released (v0.2.0-next.0)
+- ⬜ Config loading (`refine.config.json` per [docs/configuration.md](docs/configuration.md)) — full schema, not just autoRefine subset
+- ⬜ Mode support: beginner / expert / silent behaviorally distinct (interactive deferred to M3 with the TUI)
+- ⬜ First 50 benchmark fixtures ([docs/benchmarking.md](docs/benchmarking.md))
+- ⬜ Full end-to-end verification in a live OpenCode session with configured provider
 
 **Exit criteria:**
 
-- [ ] All passes from the SKILL.md pipeline table exist (heuristic implementations acceptable)
+- [x] All passes from the SKILL.md pipeline table exist (heuristic implementations)
 - [ ] Four flagship before/after examples reproduce through the real pipeline
 - [ ] Silent mode requires zero interaction end-to-end
 
@@ -123,7 +132,7 @@ Legend: ✅ done · 🚧 in progress · ⬜ not started
 
 ---
 
-## What Phase 1 Should Build (detailed handoff)
+## What Phase 1 Built (detailed handoff)
 
 Phase 1 = M1 above. Concretely, in dependency order:
 
@@ -133,9 +142,16 @@ Phase 1 = M1 above. Concretely, in dependency order:
 4. `src/core/registry.ts` — pass registration and validation (kind/phase/uniqueness rules)
 5. `src/passes/intent-detection.ts`
 6. `src/passes/ambiguity-detection.ts`
-7. `src/passes/structure.ts`
-8. `tests/golden/` harness + first 10 fixtures (port the four examples)
-9. GitHub Actions CI
-10. OpenCode smoke test + docs update
+7. `src/passes/missing-context.ts`
+8. `src/passes/context-enrichment.ts`
+9. `src/passes/constraint-extraction.ts`
+10. `src/passes/goal-role-extraction.ts`
+11. `src/passes/structure.ts`
+12. `src/passes/output-format.ts`
+13. `src/passes/task-decomposition.ts`
+14. `src/passes/verification.ts`
+15. `tests/golden/` harness + 8 fixtures (ported from the four examples)
+16. GitHub Actions CI
+17. OpenCode smoke test + docs update
 
-**Definition of done for Phase 1:** the M1 exit criteria above, all green in CI, and a tagged `v0.1.0`.
+**Definition of done for Phase 1:** the M1 exit criteria above, all green in CI, and a tagged `v0.2.0-next.0`.

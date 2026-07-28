@@ -1,0 +1,10 @@
+﻿intent_must_contain:
+  - "postgres"
+  - "sqlite"
+  - "saas"
+must_not_contain:
+  - "I recommend"
+  - "benchmarks show"
+  - "the best choice is"
+  - "PostgreSQL is superior"
+  - "SQLite is the better option"

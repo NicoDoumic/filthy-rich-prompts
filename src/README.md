@@ -1,6 +1,6 @@
 # src/ — Module Map
 
-> **M1+ status.** The core engine, three foundational passes, and OpenCode integration are implemented. This directory pre-allocates the full layout so future phases have an obvious home for everything and contributors never wonder "where does this file go?". The authoritative spec for what gets built is [../docs/architecture.md](../docs/architecture.md); the build order is [../ROADMAP.md](../ROADMAP.md).
+> **M1+ status.** The core engine, all 11 built-in passes, and OpenCode integration are implemented. This directory pre-allocates the full layout so future phases have an obvious home for everything and contributors never wonder "where does this file go?". The authoritative spec for what gets built is [../docs/architecture.md](../docs/architecture.md); the build order is [../ROADMAP.md](../ROADMAP.md).
 
 ## Layout & Dependency Rules
 
@@ -18,10 +18,10 @@ src/
 │
 ├── passes/          # Built-in passes. Depend ONLY on core types. One pass = one file.
 │   │                #   Never imported by core; registered via core/registry.
-│   │                # Phase 1: intent-detection.ts · ambiguity-detection.ts · structure.ts
-│   │                # Phase 2: missing-context.ts · constraint-extraction.ts ·
-│   │                #          goal-extraction.ts · output-format.ts · task-decomposition.ts ·
-│   │                #          generate.ts (60) · verify.ts (70)
+│   │                #   intent-detection.ts · ambiguity-detection.ts · missing-context.ts
+│   │                #   context-enrichment.ts · constraint-extraction.ts
+│   │                #   goal-role-extraction.ts · structure.ts · output-format.ts
+│   │                #   task-decomposition.ts · final-generation.ts · verification.ts
 │
 ├── plugins/         # Plugin loader + capability enforcement (M5). Depends on core.
 │   │                #   Discovers packages listed in config `plugins:`, validates peer ranges,
@@ -30,7 +30,7 @@ src/
 ├── integrations/    # Host-integrations (added in the v0.2.0-next.0 pre-release).
 │   │                #   opencode-plugin.ts — self-contained OpenCode hook (chat.messages.transform)
 │   │                #   refine-outgoing.ts — pure outgoing-prompt logic (no OpenCode types)
-│   │                #   min-config.ts      — MINIMAL autoRefine-only config (M2 subset, see file docs)
+│   │                #   config-loader.ts  — full config resolution (schema, 4-level precedence)
 │
 ├── reporting/       # Renderers: text/markdown/JSON output of RefinementReport, diff views.
 │                    #   Depends on core. Shared by CLI and TUI — one renderer, two shells.

@@ -58,7 +58,7 @@
     {
       "id": "final-generation",
       "phase": 60,
-      "kind": "transformation",
+      "kind": "generation",
       "status": "applied"
     },
     {

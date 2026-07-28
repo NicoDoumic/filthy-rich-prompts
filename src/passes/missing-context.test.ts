@@ -6,17 +6,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { missingContextDetection } from "./missing-context.js";
-import { initialContext } from "../core/context.js";
-import type { PassContext, ResolvedConfig } from "../core/types.js";
-
-const EMPTY_CONFIG: ResolvedConfig = {
-  passes: {},
-  toolVersion: "test",
-};
-
-function ctxOf(prompt: string): PassContext {
-  return initialContext(prompt, EMPTY_CONFIG);
-}
+import { ctxOf } from "../../tests/helpers/ctxOf.js";
 
 async function codesFor(prompt: string): Promise<string[]> {
   const result = await missingContextDetection.run(ctxOf(prompt));

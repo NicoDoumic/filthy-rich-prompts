@@ -7,6 +7,11 @@
 import { runPipeline } from "./core/pipeline.js";
 import { createRegistry } from "./core/registry.js";
 import { TOOL_VERSION } from "./core/version.js";
+import {
+  clarifyingQuestions,
+  modeTagline,
+  type Mode as _Mode,
+} from "./core/modes.js";
 import { ambiguityDetection } from "./passes/ambiguity-detection.js";
 import { constraintExtraction } from "./passes/constraint-extraction.js";
 import { contextEnrichment } from "./passes/context-enrichment.js";
@@ -22,8 +27,8 @@ import type {
   Pass,
   RefineOptions,
   RefineResult,
-  ResolvedConfig,
 } from "./core/types.js";
+import { resolveConfig, toResolvedConfig } from "./integrations/config-loader.js";
 
 export type * from "./core/types.js";
 export { createRegistry, RegistryError } from "./core/registry.js";
@@ -58,23 +63,53 @@ export const builtinPasses: readonly Pass[] = [
   verification,
 ];
 
+export type { Mode } from "./core/modes.js";
+export { DEFAULT_MODE } from "./core/modes.js";
+
 /**
  * Refines a raw prompt through the built-in pipeline.
  *
- * Returns the refined prompt, its line-wise diff against the original, every
- * explanation, and the aggregated report (ROADMAP M1 exit criterion).
+ * Mode-aware: the `mode` option controls output presentation.
+ *   - beginner (default): full explanations, clarifying questions
+ *   - expert: terse one-liners, only blocking questions
+ *   - silent: no questions, assumptions inline
  *
  * @example
- * const result = await refine('make the login faster it\'s broken sometimes');
+ * const result = await refine('make the login faster', { mode: 'silent' });
  * console.log(result.refined);
  */
 export async function refine(
   rawPrompt: string,
   options: RefineOptions = {},
 ): Promise<RefineResult> {
-  const config: ResolvedConfig = {
-    passes: { ...(options.passes ?? {}) },
-    toolVersion: TOOL_VERSION,
-  };
-  return runPipeline(createRegistry(builtinPasses), rawPrompt, config);
+  const resolved = resolveConfig(process.cwd(), options);
+  const config = toResolvedConfig(resolved, TOOL_VERSION);
+
+  const result = await runPipeline(createRegistry(builtinPasses), rawPrompt, config);
+
+  // Mode-aware post-processing: only applied when mode is explicitly requested.
+  const mode = config.mode as _Mode | undefined;
+  if (mode !== undefined) {
+    const diagnostics = result.report.diagnostics ?? [];
+
+    let refined = result.refined;
+
+    const questions = clarifyingQuestions(mode, diagnostics);
+    if (questions.length > 0) {
+      refined = refined.trimEnd() + "\n\n" + questions.join("\n") + "\n";
+    }
+
+    const tagline = modeTagline(mode);
+    if (tagline) {
+      refined = refined.trimEnd() + "\n" + tagline + "\n";
+    }
+
+    return {
+      ...result,
+      refined,
+      report: { ...result.report, mode },
+    };
+  }
+
+  return result;
 }

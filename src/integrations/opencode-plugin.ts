@@ -16,7 +16,7 @@
  * `["./.opencode/plugin/opencode-plugin.js", { "autoRefine": true }]` in
  * opencode.json → refine.config.json `autoRefine` → default OFF.
  */
-import { loadMinConfig } from "./min-config.js";
+import { loadMinConfig } from "./config-loader.js";
 import { refineOutgoing } from "./refine-outgoing.js";
 
 /** Plugin options tuple form: `["<plugin>", { "autoRefine": true }]`. */

@@ -1,12 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { goalRoleExtraction } from "./goal-role-extraction.js";
-import { initialContext } from "../core/context.js";
-import type { PassContext, ResolvedConfig } from "../core/types.js";
-
-const EMPTY_CONFIG: ResolvedConfig = { passes: {}, toolVersion: "test" };
-function ctxOf(prompt: string): PassContext {
-  return initialContext(prompt, EMPTY_CONFIG);
-}
+import { ctxOf } from "../../tests/helpers/ctxOf.js";
 
 describe("goal & role extraction", () => {
   it("adds objective and role sections", async () => {

@@ -1,0 +1,10 @@
+﻿intent_must_contain:
+  - "dashboard"
+  - "broken"
+  - "iphone"
+must_not_contain:
+  - "viewport"
+  - "media query"
+  - "responsive breakpoint"
+  - "flex-wrap"
+  - "overflow-x"

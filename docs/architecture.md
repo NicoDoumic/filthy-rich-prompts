@@ -1,6 +1,6 @@
 # Architecture
 
-> Status: **Accepted design** (Phase 0). This is the authoritative spec for Phase 1 implementation.
+> Status: **Implemented** — canonical spec for the pipeline. All passes, context model, and engine described here are built and tested.
 
 This document defines how filthy-rich-prompts works internally. If you only read one design doc, read this one.
 

@@ -69,7 +69,7 @@ These standards exist so that 50 contributors writing 50 passes produce one cohe
 | Runtime/build   | Node LTS · `tsup` for builds                                              |
 | Tests           | vitest (+ fast-check for property tests)                                  |
 | Lint/format     | ESLint flat config + Prettier                                             |
-| Commits         | commitlint + Conventional Commits                                         |
+| Commits         | PR-title check (Conventional Commits)                                     |
 | Versioning      | changesets                                                                |
 | Package manager | pnpm (pinned via `packageManager` field + corepack)                       |
 | CI              | GitHub Actions (matrix per [testing-strategy.md §6](testing-strategy.md)) |

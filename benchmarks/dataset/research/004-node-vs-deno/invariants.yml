@@ -1,0 +1,10 @@
+﻿intent_must_contain:
+  - "node"
+  - "deno"
+  - "microservices"
+must_not_contain:
+  - "I recommend Node"
+  - "I recommend Deno"
+  - "Node is superior"
+  - "Deno is superior"
+  - "the clear winner"

@@ -1,0 +1,12 @@
+﻿intent_must_contain:
+  - "dashboard"
+  - "slow"
+  - "login"
+  - "react"
+  - "node"
+must_not_contain:
+  - "I've profiled the application"
+  - "the average load time is"
+  - "specific metrics reveal"
+  - "added a loading spinner"
+  - "implemented caching with"

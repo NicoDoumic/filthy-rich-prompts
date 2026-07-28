@@ -57,7 +57,7 @@ export const finalGeneration: Pass = {
   id: "final-generation",
   description:
     "Assembles the refined prompt from all pass outputs into the canonical section order.",
-  kind: "transformation",
+  kind: "generation",
   phase: 60,
   requiresLLM: false,
   requiresNetwork: false,

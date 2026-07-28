@@ -1,0 +1,11 @@
+﻿intent_must_contain:
+  - "export"
+  - "crashed"
+  - "fix"
+  - "worked yesterday"
+must_not_contain:
+  - "stack trace"
+  - "error code"
+  - "reproduced the crash"
+  - "null pointer"
+  - "TypeError"

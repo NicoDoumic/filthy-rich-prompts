@@ -6,6 +6,22 @@
 
 - Pre-release: **OpenCode auto-refine hook** — with `autoRefine: true`, every outgoing OpenCode prompt passes through the refiner before reaching the model (`experimental.chat.messages.transform`, self-contained `dist/opencode-plugin.js`, core inlined, zero deps). Blocking diagnostics append an `## Open questions` section so the model asks for missing context before executing. Toggle via plugin options or minimal `refine.config.json` (`autoRefine` only — strict JSON, M2 subset); default off. Includes `refine-outgoing` (pure hook logic), `min-config` (minimal loader), 22 hook tests, standalone plugin bundle smoke test, and CI step. `structure` remains PROVISIONAL against the Tier 0 gate (see release notes).
 
+## 0.1.1
+
+### Patch Changes
+
+- **Phase 1 completion — 7 new heuristic passes.** The full 10-pass pipeline is now implemented:
+
+  **Detection passes:** `missing-context-detection` (phase 20) — flags absent information the task depends on.
+
+  **Transformation passes:** `context-enrichment` (phase 30) — surfaces and structures existing context; `constraint-extraction` (phase 40) — turns implicit constraints into explicit statements; `goal-role-extraction` (phase 40) — states the objective and infers the expert role; `output-format-inference` (phase 50) — specifies the desired output format; `task-decomposition` (phase 50) — splits compound requests into ordered sub-tasks.
+
+  **Generation passes:** `verification` (phase 70) — checks the refined prompt against the original for intent drift and information loss.
+
+  All passes are heuristic-only, zero-dependency, and idempotent (skip already-structured prompts). 134 tests green (up from 100), 6/6 property invariants passing, coverage gates enforced.
+
+  **Idempotency fix:** All new passes skip prompts with existing markdown headings, ensuring P2 invariance (refine(refine(x)) ≈ refine(x)).
+
 ## 0.1.0
 
 ### Minor Changes
@@ -26,8 +42,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 (see [docs/versioning.md](docs/versioning.md) for our 0.x-era policy).
 
-Starting with Phase 1, this file is generated from [changesets](https://github.com/changesets/changesets) — do not edit release sections by hand.
-
-## [Unreleased]
-
-(The Phase 0 repository foundation — mission, vision, philosophy, architecture, SKILL.md, design specs, contributor infrastructure, worked examples, and the roadmap — shipped as part of 0.1.0 above.)
+This file is generated from [changesets](https://github.com/changesets/changesets).

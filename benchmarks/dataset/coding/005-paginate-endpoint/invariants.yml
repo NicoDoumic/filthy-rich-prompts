@@ -1,0 +1,9 @@
+﻿intent_must_contain:
+  - "pagination"
+  - "users endpoint"
+must_not_contain:
+  - "cursor-based"
+  - "page size"
+  - "offset"
+  - "limit"
+  - "page=2"

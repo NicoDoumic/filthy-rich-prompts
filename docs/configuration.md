@@ -1,6 +1,6 @@
 # Configuration Format
 
-> Status: **Proposed design** — implemented in M2. Schema freezes at 1.0. Until then, additive changes only.
+> Status: **Partially implemented** — autoRefine-only subset is live in v0.2.0-next.0 (see `src/integrations/min-config.ts`). Full schema (4-level precedence, pass options, model config) targets M2. Schema freezes at 1.0. Until then, additive changes only.
 
 Zero-config must be great; total configurability must be possible. This document defines the single config surface shared by the OpenCode skill, the CLI, and the TUI.
 
@@ -20,6 +20,8 @@ Zero-config must be great; total configurability must be possible. This document
 ## 2. Discovery & Precedence
 
 Config resolves from these sources, **highest precedence wins**:
+
+> **Implementation note:** The 4-level precedence merge is **not yet implemented** — currently only the plugin options level (CLI flags / skill invocation options) is wired up. The full merge engine across all four layers is planned for M2.
 
 1. **CLI flags / skill invocation options** (e.g. `--mode expert`, `--no-pass structure`)
 2. **Project config** — nearest `refine.config.json` walking up from cwd

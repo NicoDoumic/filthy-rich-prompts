@@ -1,0 +1,10 @@
+﻿intent_must_contain:
+  - "memory"
+  - "deploy"
+  - "server"
+must_not_contain:
+  - "heap snapshot"
+  - "profiling results indicate"
+  - "identified a leak in"
+  - "event listener cleanup"
+  - "closure retaining"

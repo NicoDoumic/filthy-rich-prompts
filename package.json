@@ -8,17 +8,24 @@
     "node": ">=22"
   },
   "license": "MIT",
+  "bin": {
+    "filthy-rich-prompts": "./dist/installer.js",
+    "frp": "./dist/cli.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./install": "./dist/installer.js"
   },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsup",
+    "setup": "node ./dist/installer.js install",
+    "uninstall": "node ./dist/installer.js uninstall",
     "test": "vitest run",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
@@ -31,7 +38,8 @@
     "smoke:plugin": "node scripts/smoke-plugin.mjs",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "pnpm build && changeset publish --provenance"
+    "release": "pnpm build && changeset publish --provenance",
+    "benchmark": "node --import tsx benchmarks/harness.ts"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

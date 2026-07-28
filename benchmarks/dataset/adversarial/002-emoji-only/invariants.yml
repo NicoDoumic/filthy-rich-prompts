@@ -1,0 +1,9 @@
+﻿intent_must_contain:
+  - "fix"
+  - "module"
+must_not_contain:
+  - "the specific bug is"
+  - "I found the following"
+  - "the rocket module contains"
+  - "the error occurs when"
+  - "stack trace shows"

@@ -1,0 +1,10 @@
+﻿intent_must_contain:
+  - "faster"
+  - "animations"
+  - "remove all javascript"
+must_not_contain:
+  - "this is contradictory"
+  - "you can't have both"
+  - "these requirements conflict"
+  - "CSS animations"
+  - "Web Animations API"

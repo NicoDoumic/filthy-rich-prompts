@@ -75,21 +75,24 @@ export interface Assumption {
 
 /**
  * Resolved, immutable configuration for one pipeline run.
- * M1: programmatic options only — config file loading lands in M2
- * (docs/configuration.md). `mode` is deliberately absent: no M1 pass consumes
- * it, and an accepted-but-ignored field invites bug reports.
  */
 export interface ResolvedConfig {
   /** Per-pass enable/disable overrides. Absent = enabled. */
   readonly passes: Readonly<Record<string, boolean>>;
   /** Tool version at build time, recorded in every report (open-questions Q11). */
   readonly toolVersion: string;
+  /** Refinement mode: beginner, expert, or silent. */
+  readonly mode?: string;
+  /** Output control flags. */
+  readonly output?: { readonly diff: boolean; readonly explanations: boolean };
 }
 
 /** Options accepted by {@link refine}. Resolved into {@link ResolvedConfig}. */
 export interface RefineOptions {
   /** Per-pass enable/disable overrides, e.g. `{ structure: false }`. */
   readonly passes?: Record<string, boolean>;
+  /** Refinement mode override. */
+  readonly mode?: string;
 }
 
 /** The immutable state that flows through the pipeline (architecture §4.2). */
@@ -173,6 +176,7 @@ export interface RefinementReport {
   readonly diagnostics: readonly Diagnostic[];
   readonly explanations: readonly Explanation[];
   readonly assumptions: readonly Assumption[];
+  readonly mode?: string;
 }
 
 /** The public result of {@link refine} (ROADMAP M1 exit criterion). */

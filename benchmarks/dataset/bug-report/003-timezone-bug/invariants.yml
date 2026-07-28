@@ -1,0 +1,10 @@
+﻿intent_must_contain:
+  - "dates"
+  - "off by one day"
+  - "Japan"
+must_not_contain:
+  - "UTC"
+  - "JST"
+  - "ISO 8601"
+  - "moment-timezone"
+  - "Intl.DateTimeFormat"

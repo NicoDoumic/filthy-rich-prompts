@@ -14,17 +14,11 @@
  * Transforms: adds `## Sub-tasks` section with decomposed tasks.
  */
 import type { Explanation, Pass } from "../core/types.js";
+import { segmentSentences } from "../core/sentences.js";
+import { HEADING_PRESENT } from "../core/headings.js";
 
 /** Cues that indicate compound requests. */
 const COMPOUND_CUES = /\b(also|and then|as well as|on top of that|additionally|furthermore|moreover|meanwhile|at the same time)\b/gi;
-
-/** Sentence boundaries. */
-function segmentSentences(text: string): string[] {
-  const segmenter = new Intl.Segmenter("en", { granularity: "sentence" });
-  return [...segmenter.segment(text)].map((part) => part.segment);
-}
-
-const HEADING_PRESENT = /^\s{0,3}#{1,6}\s/m;
 
 export const taskDecomposition: Pass = {
   id: "task-decomposition",

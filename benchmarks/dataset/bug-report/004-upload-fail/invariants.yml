@@ -1,0 +1,10 @@
+﻿intent_must_contain:
+  - "upload"
+  - "10MB"
+  - "fails"
+must_not_contain:
+  - "multipart"
+  - "chunked upload"
+  - "S3 presigned"
+  - "nginx"
+  - "client_max_body_size"

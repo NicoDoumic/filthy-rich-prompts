@@ -1,12 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { taskDecomposition } from "./task-decomposition.js";
-import { initialContext } from "../core/context.js";
-import type { PassContext, ResolvedConfig } from "../core/types.js";
-
-const EMPTY_CONFIG: ResolvedConfig = { passes: {}, toolVersion: "test" };
-function ctxOf(prompt: string): PassContext {
-  return initialContext(prompt, EMPTY_CONFIG);
-}
+import { ctxOf } from "../../tests/helpers/ctxOf.js";
 
 describe("task decomposition", () => {
   it("splits compound requests into sub-tasks", async () => {

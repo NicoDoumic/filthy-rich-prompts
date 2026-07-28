@@ -1,0 +1,7 @@
+﻿intent_must_contain:
+  - "fix"
+must_not_contain:
+  - "I've identified the issue"
+  - "the problem is in"
+  - "the solution is to"
+  - "the root cause"

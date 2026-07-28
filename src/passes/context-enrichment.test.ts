@@ -6,17 +6,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { contextEnrichment } from "./context-enrichment.js";
-import { initialContext } from "../core/context.js";
-import type { PassContext, ResolvedConfig } from "../core/types.js";
-
-const EMPTY_CONFIG: ResolvedConfig = {
-  passes: {},
-  toolVersion: "test",
-};
-
-function ctxOf(prompt: string): PassContext {
-  return initialContext(prompt, EMPTY_CONFIG);
-}
+import { ctxOf } from "../../tests/helpers/ctxOf.js";
 
 describe("context enrichment", () => {
   it("extracts context sentences into a ## Context section", async () => {

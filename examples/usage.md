@@ -1,12 +1,14 @@
 # Example Usage
 
-> **Status note (M1+):** the core engine, three foundational passes, and OpenCode auto-refine hook are implemented. This page documents how usage works — the contract for the CLI (M3) and TUI (M3) is still future, but the library API and OpenCode skill integration are live. The OpenCode smoke test in M1 verified every claim here against a live install.
+> **Status note (v0.2.0-next.0):** the full 11-pass pipeline and OpenCode auto-refine hook are implemented. This page documents how usage works — the contract for the CLI (M3) and TUI (M3) is still future, but the library API and OpenCode skill integration are live. For a quick start, see [docs/quickstart.md](../docs/quickstart.md); for troubleshooting, see [docs/troubleshooting.md](../docs/troubleshooting.md).
 
 ---
 
 ## 1. As an OpenCode Skill (primary)
 
-**Install** _(verified on OpenCode 1.18.5 — smoke test 2026-07-26)_:
+**Install — recommended:** `npx filthy-rich-prompts install` (one command, auto-detects OS, installs skill + plugin + config).
+
+**Manual install** _(verified on OpenCode 1.18.5 — smoke test 2026-07-26)_:
 
 ```bash
 # Global (available in every project):

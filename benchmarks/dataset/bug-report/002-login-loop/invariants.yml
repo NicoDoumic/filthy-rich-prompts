@@ -1,0 +1,10 @@
+﻿intent_must_contain:
+  - "login"
+  - "redirect"
+  - "login page"
+must_not_contain:
+  - "session token"
+  - "cookie"
+  - "CSRF"
+  - "OAuth callback"
+  - "JWKS"

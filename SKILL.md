@@ -12,7 +12,7 @@ description: >-
 
 **Prettier for prompts.** You sit between the user's raw request and the model's execution of it. Your job is to make the request _objectively better_ — clearer, better structured, fully constrained — while changing nothing about what the user actually wants.
 
-> **Status:** M1 (v0.1.0). Passes marked ✅ below exist and are golden-tested; all others are M2+ (see `ROADMAP.md`). Until a pass exists, apply the principles and pipeline below as instructions. Verified to load in OpenCode 1.18.5 (see `examples/usage.md`). 100 tests green on Node 22/24/26.
+> **Status:** v0.2.0-next.0. All passes marked ✅ below exist and are golden-tested. Verified to load in OpenCode 1.18.5 (see `examples/usage.md`).
 
 ## The Prime Directives (inviolable)
 
@@ -42,14 +42,15 @@ Refinement is a pipeline of independent passes over an immutable context — nev
 | ----: | -------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
 |    10 | Intent detection ✅              | detection      | Classify the request type (coding, bug report, research, writing, planning, other) and extract the primary goal. |
 |    20 | Ambiguity detection ✅           | detection      | Flag terms/phrases with multiple plausible interpretations.                                                      |
-|    20 | Missing-context detection        | detection      | Flag absent information the task depends on (environment, versions, scope, audience, constraints).               |
-|    30 | Context enrichment               | transformation | Surface and structure context already present in the prompt; attach flagged assumptions.                         |
-|    40 | Constraint extraction            | transformation | Turn implicit constraints ("make it fast", "keep it simple") into explicit, checkable statements.                |
-|    40 | Goal & role extraction           | transformation | State the objective and infer the appropriate expert role for the executing model.                               |
-|    50 | Structure & output formatting ✅ | transformation | Reorganize into a canonical structure; specify the desired output format.                                        |
-|    50 | Task decomposition               | transformation | Split compound requests into ordered, separable sub-tasks.                                                       |
-|    60 | Final generation                 | generation     | Assemble the refined prompt from all pass outputs.                                                               |
-|    70 | Verification                     | generation     | Check the refined prompt against the original for intent drift and information loss. Report violations.          |
+|    20 | Missing-context detection ✅     | detection      | Flag absent information the task depends on (environment, versions, scope, audience, constraints).               |
+|    30 | Context enrichment ✅            | transformation | Surface and structure context already present in the prompt; attach flagged assumptions.                         |
+|    40 | Constraint extraction ✅         | transformation | Turn implicit constraints ("make it fast", "keep it simple") into explicit, checkable statements.                |
+|    40 | Goal & role extraction ✅        | transformation | State the objective and infer the appropriate expert role for the executing model.                               |
+|    50 | Structure ✅                     | transformation | Reorganize into a canonical structure with sections and headings.                                                |
+|    50 | Output format inference ✅       | transformation | Detect and specify the desired output format (list, table, code, prose, etc.).                                   |
+|    50 | Task decomposition ✅            | transformation | Split compound requests into ordered, separable sub-tasks.                                                       |
+|    60 | Final generation ✅              | generation     | Assemble the refined prompt from all pass outputs into canonical section order.                                  |
+|    70 | Verification ✅                  | detection      | Check the refined prompt against the original for intent drift and information loss. Report violations.          |
 
 Detection passes **never mutate** the prompt; they emit diagnostics. Transformation passes mutate the working prompt and must attach an explanation per change. Generation passes assemble and verify the output.
 
@@ -85,3 +86,4 @@ Every refinement produces:
 - `docs/design-philosophy.md` — the reasoning behind the prime directives
 - `docs/evaluation-metrics.md` — how "objectively better" is measured
 - `examples/before-after/` — worked transformations with per-change rationale
+- `docs/troubleshooting.md` — common installation and configuration issues

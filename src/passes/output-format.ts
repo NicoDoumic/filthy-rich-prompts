@@ -13,6 +13,7 @@
  * Transforms: adds `## Output Format` section.
  */
 import type { Explanation, Pass } from "../core/types.js";
+import { HEADING_PRESENT } from "../core/headings.js";
 
 /** Cues that indicate a desired output format. */
 const FORMAT_CUES: Record<string, RegExp[]> = {
@@ -27,9 +28,6 @@ const FORMAT_CUES: Record<string, RegExp[]> = {
 
 /** Cues that suggest the output format is already specified. */
 const EXPLICIT_FORMAT = /## Output Format|## Deliverables?|## Output|## Result/m;
-
-/** Any markdown heading means the prompt is already structured — skip. */
-const HEADING_PRESENT = /^\s{0,3}#{1,6}\s/m;
 
 export const outputFormatInference: Pass = {
   id: "output-format-inference",

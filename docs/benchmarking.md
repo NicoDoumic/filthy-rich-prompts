@@ -1,6 +1,6 @@
 # Benchmarking Methodology (Future)
 
-> Status: **Proposed design** — harness lands in M4, first 50 fixtures in M2, 200+ fixtures in M4.
+> Status: **Proposed design** — harness remains M4; first 50 fixtures target M2.
 
 "Objectively better" is the product's core promise. The benchmark is how we keep ourselves honest: a public dataset, a repeatable harness, and regression gates in CI. If a change makes prompts worse, the benchmark must catch it before users do.
 

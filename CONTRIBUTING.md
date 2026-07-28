@@ -43,6 +43,14 @@ Your proposal must answer:
 
 A maintainer will respond within a few days. Approved proposals get the `status: accepted` label and become implementation issues marked `good first issue` where appropriate.
 
+## Getting Started
+
+If you haven't used filthy-rich-prompts before:
+
+- [docs/quickstart.md](docs/quickstart.md) — install, enable, verify in under 3 minutes
+- [docs/troubleshooting.md](docs/troubleshooting.md) — fix common installation and config issues
+- [docs/faq.md](docs/faq.md) — answers to common questions
+
 ## Development Workflow
 
 We use **trunk-based development** with short-lived branches. Full details in [docs/development-workflow.md](docs/development-workflow.md); the short version:
@@ -90,7 +98,7 @@ When reviewing, ask in order:
 
 ## Reporting Security Issues
 
-If a refinement pass could leak or expose sensitive content from a user's prompt (see the privacy discussion in [docs/open-questions.md](docs/open-questions.md)), **do not open a public issue**. Email the maintainers or use GitHub's private vulnerability reporting. (A `SECURITY.md` will ship with Phase 1.)
+If a refinement pass could leak or expose sensitive content from a user's prompt (see the privacy discussion in [docs/open-questions.md](docs/open-questions.md)), **do not open a public issue**. See [SECURITY.md](SECURITY.md) for reporting instructions.
 
 ## Code of Conduct
 

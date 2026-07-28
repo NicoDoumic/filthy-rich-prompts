@@ -1,0 +1,1384 @@
+{
+  "generated": "2026-07-28T15:06:10.694Z",
+  "toolVersion": "0.2.0-next.0",
+  "summary": {
+    "total": 25,
+    "tier0Passed": 25,
+    "tier0Failed": 0,
+    "errors": 0,
+    "avgComposite": 0.57,
+    "byCategory": {
+      "adversarial": {
+        "total": 4,
+        "passed": 4,
+        "avgComposite": 0.55
+      },
+      "bug-report": {
+        "total": 5,
+        "passed": 5,
+        "avgComposite": 0.53
+      },
+      "coding": {
+        "total": 6,
+        "passed": 6,
+        "avgComposite": 0.66
+      },
+      "research": {
+        "total": 5,
+        "passed": 5,
+        "avgComposite": 0.57
+      },
+      "writing": {
+        "total": 5,
+        "passed": 5,
+        "avgComposite": 0.53
+      }
+    },
+    "byDifficulty": {
+      "hard": {
+        "total": 6,
+        "passed": 6,
+        "avgComposite": 0.57
+      },
+      "medium": {
+        "total": 10,
+        "passed": 10,
+        "avgComposite": 0.57
+      },
+      "easy": {
+        "total": 9,
+        "passed": 9,
+        "avgComposite": 0.58
+      }
+    }
+  },
+  "fixtures": [
+    {
+      "id": "adversarial/001-all-lowercase",
+      "category": "adversarial",
+      "difficulty": "hard",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "fix",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "I've identified the issue",
+            "found": false
+          },
+          {
+            "phrase": "the problem is in",
+            "found": false
+          },
+          {
+            "phrase": "the solution is to",
+            "found": false
+          },
+          {
+            "phrase": "the root cause",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.55
+      },
+      "rawWords": 4,
+      "refinedWords": 28,
+      "refinedLength": 187,
+      "durationMs": 10
+    },
+    {
+      "id": "adversarial/002-emoji-only",
+      "category": "adversarial",
+      "difficulty": "hard",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "fix",
+            "found": true
+          },
+          {
+            "phrase": "module",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "the specific bug is",
+            "found": false
+          },
+          {
+            "phrase": "I found the following",
+            "found": false
+          },
+          {
+            "phrase": "the rocket module contains",
+            "found": false
+          },
+          {
+            "phrase": "the error occurs when",
+            "found": false
+          },
+          {
+            "phrase": "stack trace shows",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.55
+      },
+      "rawWords": 8,
+      "refinedWords": 36,
+      "refinedLength": 227,
+      "durationMs": 4
+    },
+    {
+      "id": "adversarial/003-contradictory",
+      "category": "adversarial",
+      "difficulty": "hard",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "faster",
+            "found": true
+          },
+          {
+            "phrase": "animations",
+            "found": true
+          },
+          {
+            "phrase": "remove all javascript",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "this is contradictory",
+            "found": false
+          },
+          {
+            "phrase": "you can't have both",
+            "found": false
+          },
+          {
+            "phrase": "these requirements conflict",
+            "found": false
+          },
+          {
+            "phrase": "CSS animations",
+            "found": false
+          },
+          {
+            "phrase": "Web Animations API",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.55
+      },
+      "rawWords": 13,
+      "refinedWords": 41,
+      "refinedLength": 277,
+      "durationMs": 1
+    },
+    {
+      "id": "adversarial/004-extremely-vague",
+      "category": "adversarial",
+      "difficulty": "hard",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "help",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "here is the solution",
+            "found": false
+          },
+          {
+            "phrase": "I've done the following",
+            "found": false
+          },
+          {
+            "phrase": "the fix has been applied",
+            "found": false
+          },
+          {
+            "phrase": "the issue is resolved",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.55
+      },
+      "rawWords": 1,
+      "refinedWords": 16,
+      "refinedLength": 130,
+      "durationMs": 8
+    },
+    {
+      "id": "bug-report/001-export-crash",
+      "category": "bug-report",
+      "difficulty": "medium",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "export",
+            "found": true
+          },
+          {
+            "phrase": "crashed",
+            "found": true
+          },
+          {
+            "phrase": "fix",
+            "found": true
+          },
+          {
+            "phrase": "worked yesterday",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "stack trace",
+            "found": false
+          },
+          {
+            "phrase": "error code",
+            "found": false
+          },
+          {
+            "phrase": "reproduced the crash",
+            "found": false
+          },
+          {
+            "phrase": "null pointer",
+            "found": false
+          },
+          {
+            "phrase": "TypeError",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.55
+      },
+      "rawWords": 12,
+      "refinedWords": 44,
+      "refinedLength": 293,
+      "durationMs": 1
+    },
+    {
+      "id": "bug-report/002-login-loop",
+      "category": "bug-report",
+      "difficulty": "easy",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "login",
+            "found": true
+          },
+          {
+            "phrase": "redirect",
+            "found": true
+          },
+          {
+            "phrase": "login page",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "session token",
+            "found": false
+          },
+          {
+            "phrase": "cookie",
+            "found": false
+          },
+          {
+            "phrase": "CSRF",
+            "found": false
+          },
+          {
+            "phrase": "OAuth callback",
+            "found": false
+          },
+          {
+            "phrase": "JWKS",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.55
+      },
+      "rawWords": 8,
+      "refinedWords": 30,
+      "refinedLength": 212,
+      "durationMs": 1
+    },
+    {
+      "id": "bug-report/003-timezone-bug",
+      "category": "bug-report",
+      "difficulty": "medium",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "dates",
+            "found": true
+          },
+          {
+            "phrase": "off by one day",
+            "found": true
+          },
+          {
+            "phrase": "Japan",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "UTC",
+            "found": false
+          },
+          {
+            "phrase": "JST",
+            "found": false
+          },
+          {
+            "phrase": "ISO 8601",
+            "found": false
+          },
+          {
+            "phrase": "moment-timezone",
+            "found": false
+          },
+          {
+            "phrase": "Intl.DateTimeFormat",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.4,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.5
+      },
+      "rawWords": 10,
+      "refinedWords": 21,
+      "refinedLength": 129,
+      "durationMs": 2
+    },
+    {
+      "id": "bug-report/004-upload-fail",
+      "category": "bug-report",
+      "difficulty": "easy",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "upload",
+            "found": true
+          },
+          {
+            "phrase": "10MB",
+            "found": true
+          },
+          {
+            "phrase": "fails",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "multipart",
+            "found": false
+          },
+          {
+            "phrase": "chunked upload",
+            "found": false
+          },
+          {
+            "phrase": "S3 presigned",
+            "found": false
+          },
+          {
+            "phrase": "nginx",
+            "found": false
+          },
+          {
+            "phrase": "client_max_body_size",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.4,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.5
+      },
+      "rawWords": 7,
+      "refinedWords": 18,
+      "refinedLength": 123,
+      "durationMs": 2
+    },
+    {
+      "id": "bug-report/005-mobile-layout",
+      "category": "bug-report",
+      "difficulty": "medium",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "dashboard",
+            "found": true
+          },
+          {
+            "phrase": "broken",
+            "found": true
+          },
+          {
+            "phrase": "iphone",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "viewport",
+            "found": false
+          },
+          {
+            "phrase": "media query",
+            "found": false
+          },
+          {
+            "phrase": "responsive breakpoint",
+            "found": false
+          },
+          {
+            "phrase": "flex-wrap",
+            "found": false
+          },
+          {
+            "phrase": "overflow-x",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.55
+      },
+      "rawWords": 6,
+      "refinedWords": 26,
+      "refinedLength": 188,
+      "durationMs": 3
+    },
+    {
+      "id": "coding/001-vague-perf-request",
+      "category": "coding",
+      "difficulty": "easy",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "dashboard",
+            "found": true
+          },
+          {
+            "phrase": "slow",
+            "found": true
+          },
+          {
+            "phrase": "login",
+            "found": true
+          },
+          {
+            "phrase": "react",
+            "found": true
+          },
+          {
+            "phrase": "node",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "I've profiled the application",
+            "found": false
+          },
+          {
+            "phrase": "the average load time is",
+            "found": false
+          },
+          {
+            "phrase": "specific metrics reveal",
+            "found": false
+          },
+          {
+            "phrase": "added a loading spinner",
+            "found": false
+          },
+          {
+            "phrase": "implemented caching with",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 1,
+        "specificity": 0.6,
+        "completeness": 0.83,
+        "structure": 0.75,
+        "composite": 0.8
+      },
+      "rawWords": 39,
+      "refinedWords": 65,
+      "refinedLength": 415,
+      "durationMs": 2
+    },
+    {
+      "id": "coding/002-add-dark-mode",
+      "category": "coding",
+      "difficulty": "easy",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "dark mode",
+            "found": true
+          },
+          {
+            "phrase": "settings",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "toggle component",
+            "found": false
+          },
+          {
+            "phrase": "ThemeProvider",
+            "found": false
+          },
+          {
+            "phrase": "CSS variables",
+            "found": false
+          },
+          {
+            "phrase": "prefers-color-scheme",
+            "found": false
+          },
+          {
+            "phrase": "color palette",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0.25,
+        "composite": 0.61
+      },
+      "rawWords": 5,
+      "refinedWords": 24,
+      "refinedLength": 172,
+      "durationMs": 2
+    },
+    {
+      "id": "coding/003-refactor-auth",
+      "category": "coding",
+      "difficulty": "medium",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "refactor",
+            "found": true
+          },
+          {
+            "phrase": "auth",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "OAuth 2.0",
+            "found": false
+          },
+          {
+            "phrase": "JWT tokens",
+            "found": false
+          },
+          {
+            "phrase": "migrate to Passport",
+            "found": false
+          },
+          {
+            "phrase": "session-based",
+            "found": false
+          },
+          {
+            "phrase": "role-based access control",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0.25,
+        "composite": 0.61
+      },
+      "rawWords": 7,
+      "refinedWords": 29,
+      "refinedLength": 195,
+      "durationMs": 1
+    },
+    {
+      "id": "coding/004-api-rate-limiting",
+      "category": "coding",
+      "difficulty": "medium",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "rate limiting",
+            "found": true
+          },
+          {
+            "phrase": "api",
+            "found": true
+          },
+          {
+            "phrase": "don't break existing clients",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "429",
+            "found": false
+          },
+          {
+            "phrase": "100 requests per minute",
+            "found": false
+          },
+          {
+            "phrase": "sliding window",
+            "found": false
+          },
+          {
+            "phrase": "Redis",
+            "found": false
+          },
+          {
+            "phrase": "X-RateLimit",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 1,
+        "specificity": 0.4,
+        "completeness": 1,
+        "structure": 0.5,
+        "composite": 0.73
+      },
+      "rawWords": 11,
+      "refinedWords": 28,
+      "refinedLength": 208,
+      "durationMs": 1
+    },
+    {
+      "id": "coding/005-paginate-endpoint",
+      "category": "coding",
+      "difficulty": "easy",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "pagination",
+            "found": true
+          },
+          {
+            "phrase": "users endpoint",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "cursor-based",
+            "found": false
+          },
+          {
+            "phrase": "page size",
+            "found": false
+          },
+          {
+            "phrase": "offset",
+            "found": false
+          },
+          {
+            "phrase": "limit",
+            "found": false
+          },
+          {
+            "phrase": "page=2",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0.25,
+        "composite": 0.61
+      },
+      "rawWords": 6,
+      "refinedWords": 27,
+      "refinedLength": 195,
+      "durationMs": 1
+    },
+    {
+      "id": "coding/006-fix-memory-leak",
+      "category": "coding",
+      "difficulty": "hard",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "memory",
+            "found": true
+          },
+          {
+            "phrase": "deploy",
+            "found": true
+          },
+          {
+            "phrase": "server",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "heap snapshot",
+            "found": false
+          },
+          {
+            "phrase": "profiling results indicate",
+            "found": false
+          },
+          {
+            "phrase": "identified a leak in",
+            "found": false
+          },
+          {
+            "phrase": "event listener cleanup",
+            "found": false
+          },
+          {
+            "phrase": "closure retaining",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0.25,
+        "composite": 0.61
+      },
+      "rawWords": 11,
+      "refinedWords": 37,
+      "refinedLength": 243,
+      "durationMs": 1
+    },
+    {
+      "id": "research/001-postgres-vs-sqlite",
+      "category": "research",
+      "difficulty": "medium",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "postgres",
+            "found": true
+          },
+          {
+            "phrase": "sqlite",
+            "found": true
+          },
+          {
+            "phrase": "saas",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "I recommend",
+            "found": false
+          },
+          {
+            "phrase": "benchmarks show",
+            "found": false
+          },
+          {
+            "phrase": "the best choice is",
+            "found": false
+          },
+          {
+            "phrase": "PostgreSQL is superior",
+            "found": false
+          },
+          {
+            "phrase": "SQLite is the better option",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.4,
+        "completeness": 1,
+        "structure": 0.25,
+        "composite": 0.56
+      },
+      "rawWords": 10,
+      "refinedWords": 24,
+      "refinedLength": 173,
+      "durationMs": 3
+    },
+    {
+      "id": "research/002-react-vs-vue",
+      "category": "research",
+      "difficulty": "easy",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "react",
+            "found": true
+          },
+          {
+            "phrase": "vue",
+            "found": true
+          },
+          {
+            "phrase": "dashboard",
+            "found": true
+          },
+          {
+            "phrase": "startup",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "I recommend React",
+            "found": false
+          },
+          {
+            "phrase": "I recommend Vue",
+            "found": false
+          },
+          {
+            "phrase": "React is better",
+            "found": false
+          },
+          {
+            "phrase": "Vue is better",
+            "found": false
+          },
+          {
+            "phrase": "the clear winner",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.4,
+        "completeness": 1,
+        "structure": 0.25,
+        "composite": 0.56
+      },
+      "rawWords": 8,
+      "refinedWords": 23,
+      "refinedLength": 167,
+      "durationMs": 1
+    },
+    {
+      "id": "research/003-aws-vs-gcp",
+      "category": "research",
+      "difficulty": "medium",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "aws",
+            "found": true
+          },
+          {
+            "phrase": "gcp",
+            "found": true
+          },
+          {
+            "phrase": "data pipeline",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "I recommend AWS",
+            "found": false
+          },
+          {
+            "phrase": "I recommend GCP",
+            "found": false
+          },
+          {
+            "phrase": "AWS is the better choice",
+            "found": false
+          },
+          {
+            "phrase": "GCP is the better choice",
+            "found": false
+          },
+          {
+            "phrase": "the clear winner",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.4,
+        "completeness": 1,
+        "structure": 0.25,
+        "composite": 0.56
+      },
+      "rawWords": 7,
+      "refinedWords": 21,
+      "refinedLength": 151,
+      "durationMs": 1
+    },
+    {
+      "id": "research/004-node-vs-deno",
+      "category": "research",
+      "difficulty": "medium",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "node",
+            "found": true
+          },
+          {
+            "phrase": "deno",
+            "found": true
+          },
+          {
+            "phrase": "microservices",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "I recommend Node",
+            "found": false
+          },
+          {
+            "phrase": "I recommend Deno",
+            "found": false
+          },
+          {
+            "phrase": "Node is superior",
+            "found": false
+          },
+          {
+            "phrase": "Deno is superior",
+            "found": false
+          },
+          {
+            "phrase": "the clear winner",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.4,
+        "completeness": 1,
+        "structure": 0.25,
+        "composite": 0.56
+      },
+      "rawWords": 6,
+      "refinedWords": 20,
+      "refinedLength": 149,
+      "durationMs": 3
+    },
+    {
+      "id": "research/005-microservices-vs-monolith",
+      "category": "research",
+      "difficulty": "hard",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "break up",
+            "found": true
+          },
+          {
+            "phrase": "monolith",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "I recommend",
+            "found": false
+          },
+          {
+            "phrase": "you should break it up",
+            "found": false
+          },
+          {
+            "phrase": "you should keep it",
+            "found": false
+          },
+          {
+            "phrase": "the right answer is",
+            "found": false
+          },
+          {
+            "phrase": "Docker",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0.25,
+        "composite": 0.61
+      },
+      "rawWords": 6,
+      "refinedWords": 29,
+      "refinedLength": 203,
+      "durationMs": 2
+    },
+    {
+      "id": "writing/001-tabs-vs-spaces-blog",
+      "category": "writing",
+      "difficulty": "easy",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "blog post",
+            "found": true
+          },
+          {
+            "phrase": "tabs",
+            "found": true
+          },
+          {
+            "phrase": "spaces",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "research shows",
+            "found": false
+          },
+          {
+            "phrase": "according to a 2019 study",
+            "found": false
+          },
+          {
+            "phrase": "accessibility data from",
+            "found": false
+          },
+          {
+            "phrase": "GitHub's Octoverse",
+            "found": false
+          },
+          {
+            "phrase": "Stack Overflow survey",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.55
+      },
+      "rawWords": 11,
+      "refinedWords": 38,
+      "refinedLength": 233,
+      "durationMs": 1
+    },
+    {
+      "id": "writing/002-api-docs",
+      "category": "writing",
+      "difficulty": "easy",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "/users",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "GET /users",
+            "found": false
+          },
+          {
+            "phrase": "POST /users",
+            "found": false
+          },
+          {
+            "phrase": "response schema",
+            "found": false
+          },
+          {
+            "phrase": "200 OK",
+            "found": false
+          },
+          {
+            "phrase": "request body",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.55
+      },
+      "rawWords": 4,
+      "refinedWords": 23,
+      "refinedLength": 179,
+      "durationMs": 1
+    },
+    {
+      "id": "writing/003-release-notes",
+      "category": "writing",
+      "difficulty": "easy",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "release notes",
+            "found": true
+          },
+          {
+            "phrase": "v2.4",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "fixed bug #",
+            "found": false
+          },
+          {
+            "phrase": "merged PR",
+            "found": false
+          },
+          {
+            "phrase": "commit",
+            "found": false
+          },
+          {
+            "phrase": "changelog entries",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.4,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.5
+      },
+      "rawWords": 5,
+      "refinedWords": 16,
+      "refinedLength": 114,
+      "durationMs": 1
+    },
+    {
+      "id": "writing/004-onboarding-guide",
+      "category": "writing",
+      "difficulty": "medium",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "onboarding",
+            "found": true
+          },
+          {
+            "phrase": "new devs",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "clone the repo",
+            "found": false
+          },
+          {
+            "phrase": "run npm install",
+            "found": false
+          },
+          {
+            "phrase": "docker-compose up",
+            "found": false
+          },
+          {
+            "phrase": ".env file",
+            "found": false
+          },
+          {
+            "phrase": "SSH key",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.4,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.5
+      },
+      "rawWords": 7,
+      "refinedWords": 18,
+      "refinedLength": 125,
+      "durationMs": 1
+    },
+    {
+      "id": "writing/005-incident-postmortem",
+      "category": "writing",
+      "difficulty": "medium",
+      "tier0": {
+        "passed": true,
+        "mustContain": [
+          {
+            "phrase": "postmortem",
+            "found": true
+          },
+          {
+            "phrase": "outage",
+            "found": true
+          },
+          {
+            "phrase": "yesterday",
+            "found": true
+          }
+        ],
+        "mustNotContain": [
+          {
+            "phrase": "the root cause was",
+            "found": false
+          },
+          {
+            "phrase": "impacted 500 users",
+            "found": false
+          },
+          {
+            "phrase": "MTTR was",
+            "found": false
+          },
+          {
+            "phrase": "the database cluster",
+            "found": false
+          },
+          {
+            "phrase": "PagerDuty",
+            "found": false
+          }
+        ]
+      },
+      "tier1": {
+        "clarity": 0.6,
+        "specificity": 0.6,
+        "completeness": 1,
+        "structure": 0,
+        "composite": 0.55
+      },
+      "rawWords": 6,
+      "refinedWords": 28,
+      "refinedLength": 209,
+      "durationMs": 1
+    }
+  ]
+}

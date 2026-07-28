@@ -1,12 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { outputFormatInference } from "./output-format.js";
-import { initialContext } from "../core/context.js";
-import type { PassContext, ResolvedConfig } from "../core/types.js";
-
-const EMPTY_CONFIG: ResolvedConfig = { passes: {}, toolVersion: "test" };
-function ctxOf(prompt: string): PassContext {
-  return initialContext(prompt, EMPTY_CONFIG);
-}
+import { ctxOf } from "../../tests/helpers/ctxOf.js";
 
 describe("output format inference", () => {
   it("adds output format section when no format specified", async () => {

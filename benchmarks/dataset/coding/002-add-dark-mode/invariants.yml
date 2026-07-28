@@ -1,0 +1,9 @@
+﻿intent_must_contain:
+  - "dark mode"
+  - "settings"
+must_not_contain:
+  - "toggle component"
+  - "ThemeProvider"
+  - "CSS variables"
+  - "prefers-color-scheme"
+  - "color palette"

@@ -1,0 +1,10 @@
+﻿intent_must_contain:
+  - "rate limiting"
+  - "api"
+  - "don't break existing clients"
+must_not_contain:
+  - "429"
+  - "100 requests per minute"
+  - "sliding window"
+  - "Redis"
+  - "X-RateLimit"

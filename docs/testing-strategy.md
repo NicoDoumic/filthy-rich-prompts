@@ -1,6 +1,6 @@
 # Testing Strategy
 
-> Status: **Proposed design** — the golden-test harness ships in Phase 1 (M1); the full pyramid builds through M4.
+> Status: **Active** — golden-test harness shipped in Phase 1 (M1); the full pyramid builds through M4.
 
 A tool whose entire promise is _correctness of transformation_ must be tested harder than the average npm package. Our test pyramid is ordered by how bad a missed bug is: losing user intent is worse than a formatting glitch, so invariants get more machinery than snapshots.
 
@@ -39,15 +39,15 @@ Fixture pairs executed through the **full pipeline** (not single passes) — bec
 
 ```
 tests/golden/
-├── coding-001-vague-perf/
+├── coding-001-dashboard-login/
 │   ├── input.md           # raw prompt
 │   ├── expected.md        # exact expected refined prompt
 │   ├── expected.report.json   # diagnostics, explanations, assumptions
-│   └── config.json        # optional per-fixture config override
+│   └── config.json        # optional per-fixture config override (not yet used)
 ```
 
-- First 10 fixtures are ported from [examples/before-after/](../examples/before-after/) — the examples in our docs must be reproducible by the real pipeline, or the docs are fiction. CI literally tests the README's promises.
-- **M1 amendment:** the four examples show outputs of passes that don't exist yet (missing-context, constraint-extraction, …), so M1 fixtures are _reduced-fidelity ports_ — expected output is exactly what the M1 passes (intent-detection, ambiguity-detection, structure) produce. Fixtures reach full fidelity as the remaining passes land in M2.
+- First 8 fixtures are ported from [examples/before-after/](../examples/before-after/) — the examples in our docs must be reproducible by the real pipeline, or the docs are fiction. CI literally tests the README's promises.
+- Fixtures include edge cases: empty input, already-structured prompts, single-line terse requests, and unicode/emoji content — proving the pipeline is robust across real-world variation.
 - Updating goldens requires `UPDATE_GOLDENS=1 pnpm test` + a PR section justifying each changed fixture. Drive-by golden updates are a review red flag.
 - Snapshots are **exact-match** for heuristic passes. Formatting normalization (trailing whitespace, line endings) is applied before comparison and nowhere else — we test what users see.
 

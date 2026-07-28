@@ -23,6 +23,8 @@
  * Transforms: adds/updates `## Context` section with structured context.
  */
 import type { Explanation, Pass } from "../core/types.js";
+import { segmentSentences } from "../core/sentences.js";
+import { HEADING_PRESENT } from "../core/headings.js";
 
 /** Cues that identify context-bearing sentences. */
 const CONTEXT_CUE =
@@ -63,19 +65,10 @@ const ASSUMPTION_RULES: readonly AssumptionRule[] = [
   },
 ];
 
-/** Splits text into sentence spans. */
-function segmentSentences(text: string): string[] {
-  const segmenter = new Intl.Segmenter("en", { granularity: "sentence" });
-  return [...segmenter.segment(text)].map((part) => part.segment);
-}
-
 /** Detects context cues in a sentence. */
 function hasContextCue(sentence: string): boolean {
   return CONTEXT_CUE.test(sentence);
 }
-
-/** Detects headings in text. */
-const HEADING_PRESENT = /^\s{0,3}#{1,6}\s/m;
 
 export const contextEnrichment: Pass = {
   id: "context-enrichment",
@@ -119,30 +112,12 @@ export const contextEnrichment: Pass = {
     // Build the context block.
     const contextBlock = contextSentences.join("").trim();
     const body = bodySentences.join("").trim();
-
-    // Check if we're already in a structured layout.
-    const hasHeading = HEADING_PRESENT.test(text);
-
-    // Build the enriched prompt.
-    let enriched: string;
     const firstContext = contextSentences[0]?.trim().slice(0, 60);
 
-    if (hasHeading) {
-      // Text already has headings — insert/update ## Context section.
-      // We append the context block after the existing content.
-      enriched = `${text.trim()}\n\n## Context\n\n${contextBlock}`;
-      if (assumptions.length > 0) {
-        enriched += `\n\n${assumptions.join("\n")}`;
-      }
-      enriched += "\n";
-    } else {
-      // No headings — build from scratch.
-      enriched = `# Task\n\n${body}\n\n## Context\n\n${contextBlock}`;
-      if (assumptions.length > 0) {
-        enriched += `\n\n${assumptions.join("\n")}`;
-      }
-      enriched += "\n";
-    }
+    // No headings — build from scratch.
+    const enriched = `# Task\n\n${body}\n\n## Context\n\n${contextBlock}` +
+      (assumptions.length > 0 ? `\n\n${assumptions.join("\n")}` : "") +
+      "\n";
 
     const baseExplanation: Explanation = {
       pass: "context-enrichment",

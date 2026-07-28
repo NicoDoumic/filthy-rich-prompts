@@ -25,23 +25,11 @@
  * Transforms: unstructured prose → `# Task` + optional `## Context` layout.
  */
 import type { Explanation, Pass } from "../core/types.js";
+import { segmentSentences } from "../core/sentences.js";
+import { HEADING_PRESENT } from "../core/headings.js";
 
-/** Any markdown heading means the prompt is already structured — leave it alone. */
-const HEADING_PRESENT = /^\s{0,3}#{1,6}\s/m;
-
-/**
- * Cues that mark a sentence as context rather than task content.
- * Line-level classification would misclassify mixed sentences, so this is
- * applied per-sentence after segmentation.
- */
 const CONTEXT_CUE =
   /\b(i'?m using|we'?re using|we use|i use|using [a-z0-9]|btw|by the way|for context|stack\s*:|running on)\b/i;
-
-/** Splits text into sentence spans, preserving original spacing between them. */
-function segmentSentences(text: string): string[] {
-  const segmenter = new Intl.Segmenter("en", { granularity: "sentence" });
-  return [...segmenter.segment(text)].map((part) => part.segment);
-}
 
 export const structure: Pass = {
   id: "structure",

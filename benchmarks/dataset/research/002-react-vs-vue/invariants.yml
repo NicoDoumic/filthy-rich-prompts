@@ -1,0 +1,11 @@
+﻿intent_must_contain:
+  - "react"
+  - "vue"
+  - "dashboard"
+  - "startup"
+must_not_contain:
+  - "I recommend React"
+  - "I recommend Vue"
+  - "React is better"
+  - "Vue is better"
+  - "the clear winner"

@@ -1,0 +1,9 @@
+﻿intent_must_contain:
+  - "refactor"
+  - "auth"
+must_not_contain:
+  - "OAuth 2.0"
+  - "JWT tokens"
+  - "migrate to Passport"
+  - "session-based"
+  - "role-based access control"

@@ -16,7 +16,7 @@ Trunk-based development, small PRs, Conventional Commits, green CI or it doesn't
 
 ## 2. Commits
 
-[Conventional Commits](https://www.conventionalcommits.org/), enforced in CI by a PR-title check (`.github/workflows/pr-title.yml`) — we squash-merge, so the PR title _is_ the commit message on `main`, which makes the title the correct thing to lint (implemented in Phase 1; this supersedes the earlier "commitlint" wording, same contract):
+[Conventional Commits](https://www.conventionalcommits.org/), enforced in CI by a PR-title check (`.github/workflows/pr-title.yml`) — we squash-merge, so the PR title _is_ the commit message on `main`, which makes the title the correct thing to lint:
 
 ```
 feat(passes): add constraint-extraction pass
@@ -68,7 +68,7 @@ chore(ci): add windows to test matrix
 
 When maintainers disagree: the principles in [design-philosophy.md](design-philosophy.md) are the tiebreaker, in order. If principles don't resolve it, the more conservative option (less change, less magic) wins by default.
 
-## 6. Local Development (Phase 1 preview)
+## 6. Local Development
 
 ```bash
 git clone <fork> && cd filthy-rich-prompts

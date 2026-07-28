@@ -1,0 +1,10 @@
+﻿intent_must_contain:
+  - "postmortem"
+  - "outage"
+  - "yesterday"
+must_not_contain:
+  - "the root cause was"
+  - "impacted 500 users"
+  - "MTTR was"
+  - "the database cluster"
+  - "PagerDuty"

@@ -1,0 +1,9 @@
+﻿intent_must_contain:
+  - "onboarding"
+  - "new devs"
+must_not_contain:
+  - "clone the repo"
+  - "run npm install"
+  - "docker-compose up"
+  - ".env file"
+  - "SSH key"

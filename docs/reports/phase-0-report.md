@@ -3,7 +3,7 @@
 *Generated: 2026-07-27*
 
 Phase 0 = quick wins + documentation hygiene + lint/format/build/test + trivial TODOs.
-No new passes were implemented (that's Ronda 1+).
+No new passes were implemented (that's Phase 1+).
 
 ---
 
@@ -111,7 +111,7 @@ These are left for you to decide:
 
 ---
 
-## 4. Proposed Order for Ronda 1 (first real implementation cycle)
+## 4. Proposed Order for Phase 1 (first real implementation cycle)
 
 Extracted from PLAN.md and ROADMAP.md priorities:
 

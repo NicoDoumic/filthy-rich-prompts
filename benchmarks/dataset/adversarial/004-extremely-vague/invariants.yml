@@ -1,0 +1,7 @@
+﻿intent_must_contain:
+  - "help"
+must_not_contain:
+  - "here is the solution"
+  - "I've done the following"
+  - "the fix has been applied"
+  - "the issue is resolved"

@@ -22,5 +22,6 @@ export function buildReport(
     diagnostics: ctx.diagnostics,
     explanations: ctx.explanations,
     assumptions: ctx.assumptions,
+    ...(ctx.config.mode ? { mode: ctx.config.mode } : {}),
   };
 }

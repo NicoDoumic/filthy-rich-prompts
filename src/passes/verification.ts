@@ -1,5 +1,5 @@
 /**
- * verification (phase 70, generation)
+ * verification (phase 70, detection)
  *
  * Checks the refined prompt against the original for intent drift and
  * information loss. This is the final gate before output.
@@ -12,7 +12,7 @@
  * - Emits `blocking` diagnostics on violation.
  *
  * No-op inputs: always runs (it's the verifier).
- * Transforms: never mutates — detection/generation pass.
+ * Transforms: never mutates — detection pass.
  */
 import type { Diagnostic, Pass } from "../core/types.js";
 

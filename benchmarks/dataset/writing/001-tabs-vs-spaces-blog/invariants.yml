@@ -1,0 +1,10 @@
+﻿intent_must_contain:
+  - "blog post"
+  - "tabs"
+  - "spaces"
+must_not_contain:
+  - "research shows"
+  - "according to a 2019 study"
+  - "accessibility data from"
+  - "GitHub's Octoverse"
+  - "Stack Overflow survey"

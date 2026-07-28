@@ -1,0 +1,8 @@
+﻿intent_must_contain:
+  - "/users"
+must_not_contain:
+  - "GET /users"
+  - "POST /users"
+  - "response schema"
+  - "200 OK"
+  - "request body"
