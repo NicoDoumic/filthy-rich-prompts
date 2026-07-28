@@ -34,7 +34,6 @@ function home(...parts: string[]): string {
 }
 
 function getOpenCodeDirs(project?: boolean) {
-  const os = platform();
   if (project) {
     const cwd = process.cwd();
     return {
@@ -42,15 +41,6 @@ function getOpenCodeDirs(project?: boolean) {
       skillDir: join(cwd, ".opencode", "skills"),
       pluginDir: join(cwd, ".opencode", "plugin"),
       configFile: join(cwd, ".opencode", "opencode.json"),
-    };
-  }
-  if (os === "win32") {
-    const appdata = process.env.APPDATA || home("AppData", "Roaming");
-    return {
-      configDir: join(appdata, "opencode"),
-      skillDir: join(appdata, "opencode", "skills"),
-      pluginDir: join(appdata, "opencode", "plugin"),
-      configFile: join(appdata, "opencode", "opencode.json"),
     };
   }
   return {
