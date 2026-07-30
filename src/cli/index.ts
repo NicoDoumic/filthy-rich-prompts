@@ -25,17 +25,16 @@ Commands:
   doctor             Audit environment, config, and installation
 
 Options:
-  --file, -f <path>  Read prompt from file
+  --file <path>      Read prompt from file (aliases: -f)
   --mode <mode>      beginner | expert | silent
   --json             Output as JSON
-  --no-color         Disable colors (also honors NO_COLOR)
   --help, -h         Show this help
   --version, -v      Show version
 
 Examples:
   frp refine "fix the login bug"
   echo "fix the login bug" | frp refine
-  frp lint --file messy.txt --no-color
+  frp lint --file messy.txt
   frp doctor
 
 Docs: https://github.com/NicoDoumic/filthy-rich-prompts
@@ -53,7 +52,12 @@ function version(): never {
 
 function readPrompt(filePath?: string, positional?: string): string {
   if (filePath) {
-    return readFileSync(resolve(filePath), "utf-8");
+    try {
+      return readFileSync(resolve(filePath), "utf-8");
+    } catch (err) {
+      process.stderr.write(`Error: cannot read file "${filePath}": ${(err as Error).message}\n`);
+      process.exit(2);
+    }
   }
   if (positional && positional.length > 0) {
     return positional;
@@ -75,9 +79,15 @@ function readPrompt(filePath?: string, positional?: string): string {
 
 // ─── Commands ──────────────────────────────────────────────────────
 
+function findFileIndex(args: string[]): number {
+  const long = args.indexOf("--file");
+  const short = args.indexOf("-f");
+  return long !== -1 ? long : short;
+}
+
 async function cmdRefine(args: string[]) {
   const json = args.includes("--json");
-  const fileIdx = args.indexOf("--file");
+  const fileIdx = findFileIndex(args);
   const filePath = fileIdx !== -1 ? args[fileIdx + 1] : undefined;
   const modeIdx = args.indexOf("--mode");
   const mode = modeIdx !== -1 ? args[modeIdx + 1] : undefined;
@@ -109,7 +119,7 @@ async function cmdRefine(args: string[]) {
 }
 
 async function cmdLint(args: string[]) {
-  const fileIdx = args.indexOf("--file");
+  const fileIdx = findFileIndex(args);
   const filePath = fileIdx !== -1 ? args[fileIdx + 1] : undefined;
   const positional = args.filter((a) =>
     !a.startsWith("-") && a !== "lint" && a !== filePath,

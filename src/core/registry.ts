@@ -12,7 +12,7 @@ const KEBAB_CASE = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
 /** Highest phase at which a transformation/generation pass may run (generate = 60). */
 const MAX_MUTATING_PHASE = 60;
 /** The reserved verification phase (architecture §3: non-mutating validation only). */
-const VERIFY_PHASE = 70;
+export const VERIFY_PHASE = 70;
 /** Highest phase at which an ordinary detection pass may run. */
 const MAX_DETECTION_PHASE = 50;
 

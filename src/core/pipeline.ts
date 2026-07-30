@@ -13,6 +13,7 @@ import { applyResult, deepFreeze, initialContext } from "./context.js";
 import { diffLines } from "./diff.js";
 import { buildReport } from "./report.js";
 import type { Registry } from "./registry.js";
+import { VERIFY_PHASE } from "./registry.js";
 import type {
   Diagnostic,
   Pass,
@@ -39,7 +40,7 @@ export function validateResult(pass: Pass, result: PassResult): string | null {
     return `detection pass "${pass.id}" returned a prompt — detection passes must not mutate`;
   }
   // Phase-70 rule: nothing mutates after verification.
-  if (pass.phase === 70 && result.prompt !== undefined) {
+  if (pass.phase === VERIFY_PHASE && result.prompt !== undefined) {
     return `pass "${pass.id}" mutated at phase 70 — the verify phase is non-mutating`;
   }
   if (result.prompt !== undefined) {
@@ -87,7 +88,7 @@ export async function runPipeline(
       result = await pass.run(frozen);
     } catch (error) {
       // Architecture §8: catch, downgrade to a diagnostic, continue.
-      const message = error instanceof Error ? error.message : String(error);
+      const message = error instanceof Error ? (error.stack ?? error.message) : String(error);
       ctx = applyResult(ctx, {
         diagnostics: [
           engineDiagnostic("PASS_CRASH", `pass "${pass.id}" threw: ${message}`),

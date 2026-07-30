@@ -1,5 +1,46 @@
 # Changelog
 
+## Unreleased (next)
+
+### Added
+
+- **Pre-Refinement Discovery phase** — new `interaction` pass kind at phase 5. The refiner now asks targeted clarifying questions before any detection or transformation pass runs. Silent mode skips discovery. Protocol: 2-5 questions per round, timeout/fallback, locale-agnostic free-text option. (`SKILL.md`, `docs/architecture.md`)
+- **`PassContext.userAnswers` field** — discovery-phase responses are stored in the context and available to all downstream passes. (`src/core/types.ts`, `src/core/context.ts`)
+- **`interactive` mode** added to `Mode` union type (`beginner | expert | interactive | silent`) and `VALID_MODES`. (`src/core/types.ts`, `src/core/modes.ts`, `SKILL.md`)
+
+### Changed
+
+- **`Mode` type canonicalized in `types.ts`** — was `string` in `ResolvedConfig.mode`, `RefineOptions.mode`, `RefinementReport.mode`. Now properly typed as the `Mode` union. Removed `as _Mode` cast in `src/index.ts`. (`src/core/types.ts`, `src/index.ts`)
+- **`VERIFY_PHASE` exported from `registry.ts`** — replaces hardcoded `70` in `pipeline.ts`. (`src/core/registry.ts`, `src/core/pipeline.ts`)
+- **`VALID_MODES` as single source of truth** — exported from `modes.ts`, consumed by `config-loader.ts`. No more duplicated `["beginner", "expert", "silent"]` array. (`src/core/modes.ts`, `src/integrations/config-loader.ts`)
+- **Strategy pattern for mode behavior** — `switch(mode)` ×3 replaced by `MODE_STRATEGIES: Record<Mode, ModeStrategy>`. Adding a mode now requires only a new strategy object. (`src/core/modes.ts`)
+- **Installer improvements** — `autoRefine` defaults to `false` (opt-in). `cmdUninstall` accepts `--project`. `NO_COLOR` env var respected. Plugin path detection uses `endsWith("filthy-rich-prompts.js")` instead of loose `includes`. Package root detection loops to filesystem root instead of hardcoded 5 iterations. (`src/installer/index.ts`)
+- **CLI improvements** — `-f` short flag implemented as alias for `--file`. `readFileSync` wrapped with user-friendly error for missing files. `--no-color` removed from USAGE (unimplemented). (`src/cli/index.ts`)
+- **Config-loader error handling** — `readConfigFile` now distinguishes `ENOENT` (normal) from permission/other errors. (`src/integrations/config-loader.ts`)
+- **`segmentSentences` cached by locale** — `Map<string, Intl.Segmenter>` prevents re-creation per call. Accepts optional `locale` parameter (default `"en"`). (`src/core/sentences.ts`)
+- **`diffLines` input size cap** — rejects inputs >100,000 lines with explicit error. (`src/core/diff.ts`)
+- **`OPEN_QUESTIONS_HEADING` deduplicated** — single constant in `modes.ts`, re-exported from `refine-outgoing.ts`. (`src/core/modes.ts`, `src/integrations/refine-outgoing.ts`)
+
+### Fixed
+
+- **Task decomposition dead code** — unreachable `hasHeading` branch removed (`src/passes/task-decomposition.ts`).
+- **OpenCode plugin performance** — `[...messages].reverse().find()` replaced with backward iteration. Nested ternary refactored to if/else chain. (`src/integrations/opencode-plugin.ts`)
+- **Silent error swallowing** — `console.warn` added to catch blocks in `refine-outgoing.ts` and `opencode-plugin.ts` (non-production only). (`src/integrations/refine-outgoing.ts`, `src/integrations/opencode-plugin.ts`)
+
+### Tests
+
+- **`modes.test.ts`** — 15 tests covering `VALID_MODES`, `modeTagline`, `clarifyingQuestions` across all 4 modes. (`src/core/modes.test.ts`)
+- **`output-format.test.ts` expanded** — 4→13 tests: all 7 format categories (list, table, code, json, markdown, prose, diagram), multi-format detection, no-op paths. (`src/passes/output-format.test.ts`)
+- **`verification.test.ts` boundary tests** — NaN edge case (empty prompt), exactly 20% token loss threshold, empty raw prompt. (`src/passes/verification.test.ts`)
+- **`pipeline.test.ts` `validateResult` tests** — 5 direct unit tests for all 4 validation branches + valid case. (`src/core/pipeline.test.ts`)
+- **`goal-role-extraction.test.ts` strengthened** — concrete assertions on role text and explanation content. (`src/passes/goal-role-extraction.test.ts`)
+- **`shouldAppendQuestions` un-exported** — removed `export` keyword (internal use only). (`src/core/modes.ts`)
+
+### Removed
+
+- **`formatExplanations` dead code** — exported but never imported, wrong signature (`string[]` vs `Explanation[]`). Removed entirely. (`src/core/modes.ts`)
+- **`REFACTORS.md`** — comprehensive audit document with 69 findings across 4 tiers. Tracked in-repo for future sessions.
+
 ## 0.2.0-next.0
 
 ### Minor Changes

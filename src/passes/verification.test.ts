@@ -84,4 +84,21 @@ describe("verification", () => {
     const codes = result.diagnostics?.map((d) => d.code) ?? [];
     expect(codes).not.toContain("INTENT_VERIFIED");
   });
+
+  it("handles empty raw prompt without NaN", async () => {
+    const ctx = ctxOf("");
+    const modifiedCtx = applyResult(ctx, { prompt: "something" });
+    const result = await verification.run(modifiedCtx);
+    const codes = result.diagnostics?.map((d) => d.code) ?? [];
+    expect(codes).not.toContain("INFO_LOSS");
+  });
+
+  it("does not flag info loss at exactly 20% token loss", async () => {
+    // raw = 5 tokens, current = 4 tokens → 20% loss — should NOT flag
+    const baseCtx = ctxOf("fix the login bug now");
+    const modifiedCtx = applyResult(baseCtx, { prompt: "fix the login bug" });
+    const result = await verification.run(modifiedCtx);
+    const codes = result.diagnostics?.map((d) => d.code) ?? [];
+    expect(codes).not.toContain("INFO_LOSS");
+  });
 });

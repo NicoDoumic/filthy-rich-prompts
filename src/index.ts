@@ -10,7 +10,6 @@ import { TOOL_VERSION } from "./core/version.js";
 import {
   clarifyingQuestions,
   modeTagline,
-  type Mode as _Mode,
 } from "./core/modes.js";
 import { ambiguityDetection } from "./passes/ambiguity-detection.js";
 import { constraintExtraction } from "./passes/constraint-extraction.js";
@@ -63,7 +62,7 @@ export const builtinPasses: readonly Pass[] = [
   verification,
 ];
 
-export type { Mode } from "./core/modes.js";
+export type { Mode } from "./core/types.js";
 export { DEFAULT_MODE } from "./core/modes.js";
 
 /**
@@ -88,9 +87,9 @@ export async function refine(
   const result = await runPipeline(createRegistry(builtinPasses), rawPrompt, config);
 
   // Mode-aware post-processing: only applied when mode is explicitly requested.
-  const mode = config.mode as _Mode | undefined;
+  const mode = config.mode;
   if (mode !== undefined) {
-    const diagnostics = result.report.diagnostics ?? [];
+    const diagnostics = result.report.diagnostics;
 
     let refined = result.refined;
 

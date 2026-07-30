@@ -15,7 +15,8 @@
 import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import type { ResolvedConfig, RefineOptions } from "../core/types.js";
+import type { Mode, ResolvedConfig, RefineOptions } from "../core/types.js";
+import { VALID_MODES } from "../core/modes.js";
 
 // ─── Schema types ───────────────────────────────────────────────────
 
@@ -29,7 +30,7 @@ interface RawConfig {
 
 interface ConfigResult {
   autoRefine: boolean;
-  mode: string;
+  mode: Mode;
   passes: Record<string, boolean>;
   output: { diff: boolean; explanations: boolean };
   model: { provider: string };
@@ -59,8 +60,10 @@ function readConfigFile(path: string): ConfigFileResult {
   let raw: string;
   try {
     raw = readFileSync(path, "utf8");
-  } catch {
-    return { ok: false, warning: "" }; // file absent is normal — caller treats as not-found
+  } catch (err) {
+    const code = (err as NodeJS.ErrnoException).code;
+    if (code === "ENOENT") return { ok: false, warning: "" };
+    return { ok: false, warning: `${path}: read error (${(err as Error).message})` };
   }
   try {
     const parsed: unknown = JSON.parse(raw);
@@ -75,10 +78,9 @@ function readConfigFile(path: string): ConfigFileResult {
 
 // ─── Validators ─────────────────────────────────────────────────────
 
-function validateMode(value: unknown): string | undefined {
+function validateMode(value: unknown): Mode | undefined {
   if (typeof value !== "string") return undefined;
-  const valid = ["beginner", "expert", "silent"];
-  return valid.includes(value) ? value : undefined;
+  return VALID_MODES.includes(value as Mode) ? (value as Mode) : undefined;
 }
 
 function validatePasses(

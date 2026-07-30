@@ -84,12 +84,8 @@ export const taskDecomposition: Pass = {
       .map((task, i) => `### Sub-task ${i + 1}\n\n${task}`)
       .join("\n\n");
 
-    const hasHeading = HEADING_PRESENT.test(text);
-
     return {
-      prompt: hasHeading
-        ? `${text.trim()}\n\n## Sub-tasks\n\n${subTaskList}\n`
-        : `# Task\n\n${text.trim()}\n\n## Sub-tasks\n\n${subTaskList}\n`,
+      prompt: `# Task\n\n${text.trim()}\n\n## Sub-tasks\n\n${subTaskList}\n`,
       explanations,
       metadata: {
         "task-decomposition:count": subTasks.length,

@@ -15,6 +15,8 @@
  */
 import { refine } from "../index.js";
 import type { RefineResult } from "../core/types.js";
+import { OPEN_QUESTIONS_HEADING } from "../core/modes.js";
+export { OPEN_QUESTIONS_HEADING };
 
 export interface RefineOutgoingOptions {
   readonly autoRefine: boolean;
@@ -31,9 +33,6 @@ export interface RefineOutgoingResult {
 
 /** The injected engine signature (defaults to the real refine; tests stub it). */
 export type RefineFn = (raw: string) => Promise<RefineResult>;
-
-export const OPEN_QUESTIONS_HEADING =
-  "## Open questions (answer before proceeding)";
 
 /**
  * Refines one outgoing prompt if auto-refine is enabled.
@@ -69,8 +68,11 @@ export async function refineOutgoing(
       changed: true,
       note: `refined by prompt-refiner (${changes} explanation${changes === 1 ? "" : "s"}, ${findings} diagnostic${findings === 1 ? "" : "s"})`,
     };
-  } catch {
+  } catch (err) {
     // Failure doctrine: the original prompt always goes through.
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("[frp refine-outgoing] refinement failed, passing through original:", err);
+    }
     return { text: rawText, changed: false };
   }
 }

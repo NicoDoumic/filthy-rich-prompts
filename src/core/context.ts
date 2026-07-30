@@ -46,6 +46,7 @@ export function initialContext(
     assumptions: [],
     config,
     metadata: {},
+    userAnswers: {},
   });
 }
 
@@ -71,5 +72,8 @@ export function applyResult(ctx: PassContext, result: PassResult): PassContext {
     metadata: result.metadata
       ? { ...ctx.metadata, ...result.metadata }
       : ctx.metadata,
+    userAnswers: result.userAnswers
+      ? { ...ctx.userAnswers, ...result.userAnswers }
+      : ctx.userAnswers,
   });
 }

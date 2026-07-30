@@ -9,8 +9,10 @@
  * @packageDocumentation
  */
 
-/** The three pass kinds — see docs/architecture.md §3. */
-export type PassKind = "detection" | "transformation" | "generation";
+/** The four pass kinds — see docs/architecture.md §3. */
+export type PassKind = "detection" | "transformation" | "generation" | "interaction";
+
+export type Mode = "beginner" | "expert" | "silent" | "interactive";
 
 /** Request categories the intent-detection pass can assign. */
 export type IntentCategory =
@@ -81,8 +83,8 @@ export interface ResolvedConfig {
   readonly passes: Readonly<Record<string, boolean>>;
   /** Tool version at build time, recorded in every report (open-questions Q11). */
   readonly toolVersion: string;
-  /** Refinement mode: beginner, expert, or silent. */
-  readonly mode?: string;
+  /** Refinement mode: beginner, expert, interactive, or silent. */
+  readonly mode?: Mode;
   /** Output control flags. */
   readonly output?: { readonly diff: boolean; readonly explanations: boolean };
 }
@@ -92,7 +94,7 @@ export interface RefineOptions {
   /** Per-pass enable/disable overrides, e.g. `{ structure: false }`. */
   readonly passes?: Record<string, boolean>;
   /** Refinement mode override. */
-  readonly mode?: string;
+  readonly mode?: Mode;
 }
 
 /** The immutable state that flows through the pipeline (architecture §4.2). */
@@ -111,6 +113,8 @@ export interface PassContext {
    * ReadonlyMap). Plugins must namespace keys: `my-plugin:key`.
    */
   readonly metadata: Readonly<Record<string, unknown>>;
+  /** User responses collected during the discovery phase, keyed by question index. */
+  readonly userAnswers: Readonly<Record<string, string>>;
 }
 
 /** The pass contract (architecture §4.3). Built-in passes are plain literals of this shape. */
@@ -143,6 +147,8 @@ export interface PassResult {
   readonly intent?: Partial<IntentModel>;
   /** Published to `context.metadata` for later passes. */
   readonly metadata?: Record<string, unknown>;
+  /** User answers from the discovery phase, keyed by question identifier. */
+  readonly userAnswers?: Record<string, string>;
 }
 
 /** One line of a line-wise diff between two prompt snapshots. */
@@ -176,7 +182,7 @@ export interface RefinementReport {
   readonly diagnostics: readonly Diagnostic[];
   readonly explanations: readonly Explanation[];
   readonly assumptions: readonly Assumption[];
-  readonly mode?: string;
+  readonly mode?: Mode;
 }
 
 /** The public result of {@link refine} (ROADMAP M1 exit criterion). */

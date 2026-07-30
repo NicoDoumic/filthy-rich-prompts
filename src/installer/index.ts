@@ -71,11 +71,13 @@ function detectPackageRoot(): string {
     ? candidate.slice(1)
     : candidate;
   let dir = normalized;
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 50; i++) {
     if (existsSync(join(dir, "package.json"))) {
       return dir;
     }
-    dir = join(dir, "..");
+    const parent = join(dir, "..");
+    if (parent === dir) break;
+    dir = parent;
   }
   return process.cwd();
 }
@@ -111,6 +113,7 @@ const noColors: typeof colors = {
 };
 
 function useColors(): typeof colors {
+  if (process.env.NO_COLOR !== undefined) return noColors;
   return process.stdout.isTTY ? colors : noColors;
 }
 
@@ -164,7 +167,7 @@ function verifyInstall(opencodeDirs: ReturnType<typeof getOpenCodeDirs>): Verifi
     try {
       const cfg = JSON.parse(readFileSync(configPath, "utf-8"));
       const hasPlugin = (cfg.plugin ?? []).some(
-        (p: unknown) => Array.isArray(p) && typeof p[0] === "string" && p[0].includes("filthy-rich-prompts"),
+        (p: unknown) => Array.isArray(p) && typeof p[0] === "string" && p[0].endsWith("filthy-rich-prompts.js"),
       );
       checks.push({
         label: "Config",
@@ -246,7 +249,7 @@ async function cmdInstall(project: boolean) {
     }
   }
 
-  const pluginEntry = [pluginDest, { autoRefine: true }];
+  const pluginEntry = [pluginDest, { autoRefine: false }];
   const existingPlugins: unknown[][] = (config.plugin as unknown[][]) ?? [];
   const alreadyInstalled = existingPlugins.some(
     (p: unknown) => Array.isArray(p) && p[0] === pluginDest,
@@ -385,11 +388,11 @@ async function cmdDoctor(project: boolean) {
 
 // ─── Uninstall Logic ────────────────────────────────────────────────
 
-async function cmdUninstall() {
+async function cmdUninstall(project: boolean) {
   const c = useColors();
   banner(c, "Uninstaller");
 
-  const opencodeDirs = getOpenCodeDirs();
+  const opencodeDirs = getOpenCodeDirs(project);
 
   const skillPath = join(opencodeDirs.skillDir, "prompt-refiner", "SKILL.md");
   if (existsSync(skillPath)) {
@@ -422,7 +425,7 @@ async function cmdUninstall() {
       const before = (config.plugin ?? []).length;
       config.plugin = (config.plugin ?? []).filter(
         (p: unknown) =>
-          !(Array.isArray(p) && typeof p[0] === "string" && p[0].includes("filthy-rich-prompts")),
+          !(Array.isArray(p) && typeof p[0] === "string" && p[0].endsWith("filthy-rich-prompts.js")),
       );
       const after = config.plugin.length;
       if (after < before) {
@@ -453,7 +456,7 @@ async function main() {
       await cmdInstall(project);
       break;
     case "uninstall":
-      await cmdUninstall();
+      await cmdUninstall(project);
       break;
     case "update":
       await cmdUpdate(project);

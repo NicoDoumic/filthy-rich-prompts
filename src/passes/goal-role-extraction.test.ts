@@ -5,13 +5,14 @@ import { ctxOf } from "../../tests/helpers/ctxOf.js";
 describe("goal & role extraction", () => {
   it("adds objective and role sections", async () => {
     const ctx = ctxOf("Fix the login bug using react");
-    // Simulate intent detection having run
     const result = await goalRoleExtraction.run(ctx);
-    expect(result.prompt).toBeDefined();
     expect(result.prompt).toContain("## Objective");
+    expect(result.prompt).toContain("Fix the login bug");
     expect(result.prompt).toContain("## Role");
-    expect(result.explanations).toBeDefined();
-    expect(result.explanations!.length).toBeGreaterThanOrEqual(2);
+    expect(result.prompt).toMatch(/Expert software engineer|Knowledgeable assistant/);
+    expect(result.explanations).toHaveLength(2);
+    expect(result.explanations?.[0]?.change).toContain("Objective");
+    expect(result.explanations?.[1]?.change).toMatch(/Role|expert role/);
   });
 
   it("returns no-op for prompts with existing headings", async () => {

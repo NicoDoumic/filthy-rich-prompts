@@ -1,0 +1,17 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "skills": {
+    "code-review": {
+      "enabled": true,
+      "description": "Two-axis review (Standards + Spec) after important changes — triggered manually via /code-review since <ref>"
+    }
+  },
+  "plugin": [
+    [
+      "C:\\Users\\Nico\\.config\\opencode\\plugin\\filthy-rich-prompts.js",
+      {
+        "autoRefine": true
+      }
+    ]
+  ]
+}

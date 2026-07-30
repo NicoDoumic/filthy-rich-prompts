@@ -52,11 +52,12 @@ async function transformMessage(
     message.content = result.text;
     return;
   }
-  const parts = Array.isArray(message.parts)
-    ? (message.parts as MessagePart[])
-    : Array.isArray(message.content)
-      ? (message.content as MessagePart[])
-      : null;
+  let parts: MessagePart[] | null = null;
+  if (Array.isArray(message.parts)) {
+    parts = message.parts as MessagePart[];
+  } else if (Array.isArray(message.content)) {
+    parts = message.content as MessagePart[];
+  }
   if (parts === null) return;
   for (const part of parts) {
     if (
@@ -89,14 +90,22 @@ export default async function promptRefinerPlugin(
       if (!autoRefine) return;
       if (!isRecord(output) || !Array.isArray(output.messages)) return;
       const messages = output.messages as ChatMessage[];
-      const lastUser = [...messages]
-        .reverse()
-        .find((message) => isRecord(message) && message.role === "user");
+      let lastUser: ChatMessage | undefined;
+      for (let i = messages.length - 1; i >= 0; i--) {
+        const msg = messages[i];
+        if (isRecord(msg) && msg?.role === "user") {
+          lastUser = msg;
+          break;
+        }
+      }
       if (lastUser === undefined) return;
       try {
         await transformMessage(lastUser, autoRefine);
-      } catch {
+      } catch (err) {
         // Failure doctrine: interception must never be worse than no interception.
+        if (process.env.NODE_ENV !== "production") {
+          console.warn("[frp opencode-plugin] transform failed, passing through original:", err);
+        }
       }
     },
   };

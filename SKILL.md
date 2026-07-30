@@ -34,12 +34,39 @@ Trigger this skill when:
 
 Do **not** activate for: trivial one-line commands, pure conversational turns, or when the user says to skip refinement.
 
+## Pre-Refinement Discovery
+
+**Before any refinement pass runs**, you SHOULD ask the user targeted clarifying questions (except in `silent` mode, which skips this phase). The raw prompt is always a first draft — never assume it contains everything needed. Use the discovery phase to surface gaps, resolve ambiguities, and align on scope _before_ spending cycles on refinement.
+
+### Discovery Protocol
+
+1. **Read the prompt once** and identify the top 3–5 unknowns that would materially change the refined output.
+2. **Ask concise, multiple-choice questions** with sensible defaults when possible. Prefer 2–3 options, plus a free-text fallback (e.g., "Other / I'll specify").
+3. **Never ask more than 5 questions** per round. If more are needed, do a second round after the user answers.
+4. **Skip questions the prompt already answers.** Do not re-ask what is already explicit.
+5. **Tailor the questions to the prompt type** (coding task, bug report, writing brief, research question, etc.).
+6. **If the user does not answer** within a reasonable back-and-forth, proceed with best-judgment assumptions and mark them explicitly in the report.
+7. **User answers are stored in the refinement context** and made available to all downstream passes (e.g., used by intent detection, constraint extraction, and output format inference).
+8. **Silent mode skips discovery entirely.** Mark all assumptions explicitly in the final report instead.
+
+### Discovery Question Categories
+
+| Category            | Example Questions                                                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------------------- |
+| Goal & scope        | "Is this a quick script or production code?" / "Should this cover only the happy path or edge cases?" |
+| Tech constraints    | "What language/framework?" / "Any version requirements?" / "Should this work on Windows, macOS, too?" |
+| Output shape        | "Code only, or code + tests?" / "Prose output: email, report, documentation?"                         |
+| Style & tone        | "Terse or verbose?" / "Formal, casual, or neutral?" / "Comments in code: yes/no?"                     |
+| Non-functional      | "Any performance targets?" / "Accessibility level?" / "Security constraints?"                         |
+| Assumption check    | "Is it safe to assume X?" — validate a key inference before baking it in.                             |
+
 ## The Refinement Pipeline
 
 Refinement is a pipeline of independent passes over an immutable context — never one giant rewrite. Passes run in phases:
 
 | Phase | Pass                             | Kind           | What it does                                                                                                     |
 | ----: | -------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
+|     5 | Discovery questions              | interaction    | Ask targeted clarifying questions before refinement; must complete before phase 10.                              |
 |    10 | Intent detection ✅              | detection      | Classify the request type (coding, bug report, research, writing, planning, other) and extract the primary goal. |
 |    20 | Ambiguity detection ✅           | detection      | Flag terms/phrases with multiple plausible interpretations.                                                      |
 |    20 | Missing-context detection ✅     | detection      | Flag absent information the task depends on (environment, versions, scope, audience, constraints).               |
@@ -52,25 +79,30 @@ Refinement is a pipeline of independent passes over an immutable context — nev
 |    60 | Final generation ✅              | generation     | Assemble the refined prompt from all pass outputs into canonical section order.                                  |
 |    70 | Verification ✅                  | detection      | Check the refined prompt against the original for intent drift and information loss. Report violations.          |
 
-Detection passes **never mutate** the prompt; they emit diagnostics. Transformation passes mutate the working prompt and must attach an explanation per change. Generation passes assemble and verify the output.
+**Pass kinds:**
+- **Interaction** passes prompt the user for input and collect responses; they do not mutate the working prompt directly.
+- **Detection** passes **never mutate** the prompt; they emit diagnostics.
+- **Transformation** passes mutate the working prompt and must attach an explanation per change.
+- **Generation** passes assemble and verify the output.
 
 ## Modes
 
 | Mode                   | Behavior                                                                                                   |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------- |
-| **beginner** (default) | Full explanations for every change; clarifying questions asked conversationally; educational tone.         |
-| **expert**             | Terse output; explanations collapsed to one-liners; only blocking ambiguities raised.                      |
-| **interactive**        | Present changes pass-by-pass; the user approves or rejects each before continuing.                         |
-| **silent**             | No questions. Apply best-judgment refinement, mark all assumptions explicitly, and report them at the end. |
+| **beginner** (default) | Discovery questions asked with context and rationale; full explanations for every change; educational tone. |
+| **expert**             | Discovery questions are terse and targeted; only blocking ambiguities raised; explanations collapsed to one-liners. |
+| **interactive**        | Discovery questions first; then present changes pass-by-pass; the user approves or rejects each before continuing. |
+| **silent**             | No discovery questions. Apply best-judgment refinement, mark all assumptions explicitly, and report them at the end. |
 
 ## Output Contract
 
 Every refinement produces:
 
-1. **The refined prompt** — ready to execute.
-2. **A diff** — original vs. refined, so the user can verify nothing was lost.
-3. **Explanations** — one rationale per change, grouped by pass.
-4. **A report** — detected intent, diagnostics (ambiguities, missing context), explicit assumptions, and any clarifying questions.
+1. **Discovery questions** (upfront, before refinement) — 2–5 targeted questions to fill gaps in the raw prompt.
+2. **The refined prompt** — ready to execute.
+3. **A diff** — original vs. refined, so the user can verify nothing was lost.
+4. **Explanations** — one rationale per change, grouped by pass.
+5. **A report** — detected intent, diagnostics (ambiguities, missing context), explicit assumptions, user answers, and any clarifying questions.
 
 ## Hard Rules Recap
 

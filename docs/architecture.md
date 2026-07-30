@@ -48,15 +48,16 @@ The cost of the pipeline approach is pass _interaction management_ (two passes e
 
 ## 3. Pass Kinds & Phases
 
-There are exactly **three kinds** of passes:
+There are exactly **four kinds** of passes:
 
 | Kind             | May mutate prompt?    | May emit diagnostics? | May emit explanations?       |
 | ---------------- | --------------------- | --------------------- | ---------------------------- |
+| `interaction`    | ❌ never              | ❌                    | ❌                            |
 | `detection`      | ❌ never              | ✅                    | ✅ (observations only)       |
 | `transformation` | ✅                    | ✅                    | ✅ **must** (one per change) |
 | `generation`     | ✅ (assembles output) | ✅                    | ✅                           |
 
-The kind is enforced by the engine: a detection pass that returns a mutated prompt **fails validation loudly**. This is our primary composability guarantee — you can reason about detection passes as read-only queries.
+Interaction passes prompt the user for input and collect responses; they do not mutate the working prompt directly.
 
 ### Pass Phases
 
@@ -64,6 +65,7 @@ Passes declare a **phase**; the engine sorts by phase, then by registration orde
 
 | Phase | Name            | Built-in passes                                                            |
 | ----: | --------------- | -------------------------------------------------------------------------- |
+|     5 | `discover`      | discovery questions (pre-refinement clarification)                         |
 |    10 | `detect-intent` | intent detection (request type, primary goal)                              |
 |    20 | `diagnose`      | ambiguity detection, missing-context detection                             |
 |    30 | `enrich`        | context enrichment                                                         |

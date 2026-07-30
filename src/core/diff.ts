@@ -25,6 +25,9 @@ export function diffLines(before: string, after: string): DiffLine[] {
   // Forward pass: find the length of the shortest edit path, recording the V
   // array after each D for the backtrack.
   const max = n + m;
+  if (max > 100_000) {
+    throw new Error("diffLines: input exceeds maximum supported size (100,000 lines)");
+  }
   const v = new Map<number, number>();
   v.set(1, 0);
   const trace: Map<number, number>[] = [];

@@ -214,4 +214,45 @@ describe("validateResult", () => {
   it("returns null for valid no-op results", () => {
     expect(validateResult(makePass(), {})).toBeNull();
   });
+
+  it("rejects a detection pass returning a prompt", () => {
+    const pass = makePass({ kind: "detection", phase: 20 });
+    expect(validateResult(pass, { prompt: "mutated" })).toContain(
+      "detection passes must not mutate",
+    );
+  });
+
+  it("rejects any pass mutating at the verify phase", () => {
+    const pass = makePass({ kind: "transformation", phase: 70, id: "verifier" });
+    expect(
+      validateResult(pass, {
+        prompt: "late",
+        explanations: [{ pass: "test", change: "c", reason: "r" }],
+      }),
+    ).toContain("verify phase is non-mutating");
+  });
+
+  it("rejects an empty prompt result", () => {
+    const pass = makePass({ kind: "transformation", phase: 50 });
+    expect(validateResult(pass, { prompt: "   " })).toContain(
+      "must never lose the user's input",
+    );
+  });
+
+  it("rejects a transformation without explanations", () => {
+    const pass = makePass({ kind: "transformation", phase: 50 });
+    expect(validateResult(pass, { prompt: "changed" })).toContain(
+      "without an explanation",
+    );
+  });
+
+  it("accepts a valid transformation with prompt and explanation", () => {
+    const pass = makePass({ kind: "transformation", phase: 50 });
+    expect(
+      validateResult(pass, {
+        prompt: "changed",
+        explanations: [{ pass: "test", change: "c", reason: "r" }],
+      }),
+    ).toBeNull();
+  });
 });
