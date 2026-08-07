@@ -100,9 +100,9 @@ The skill itself (manual invocation via `prompt-refiner`) remains available rega
 
 ## 9. Is there a CLI yet?
 
-**Not yet.** The `frp` binary (`frp refine`, `frp lint`, `frp doctor`) is planned for M3. See [docs/cli-design.md](../docs/cli-design.md) for the full command surface.
+**Yes.** The `frp` binary (`frp refine`, `frp lint`, `frp doctor`) ships with the package. See [docs/cli-design.md](../docs/cli-design.md) for the full command surface.
 
-Until then, the primary interface is the OpenCode skill and the programmatic `refine()` API.
+The primary interface remains the OpenCode skill, the auto-refine plugin, and the programmatic `refine()` API.
 
 ---
 

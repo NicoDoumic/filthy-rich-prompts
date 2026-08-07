@@ -62,4 +62,15 @@ describe("context enrichment", () => {
     expect(result.metadata!["context-enrichment:context-sentences"]).toBe(1);
     expect(result.metadata!["context-enrichment:assumptions"]).toBeGreaterThanOrEqual(1);
   });
+
+  it("extracts context without inventing assumptions when no tech cues exist", async () => {
+    // "for " is a context cue, but no recognized stack keywords → 0 assumptions.
+    const result = await contextEnrichment.run(
+      ctxOf("Run the rollout for all customers"),
+    );
+    expect(result.prompt).toBeDefined();
+    expect(result.prompt).toContain("## Context");
+    expect(result.prompt).not.toContain("[assumption:");
+    expect(result.explanations).toHaveLength(1);
+  });
 });

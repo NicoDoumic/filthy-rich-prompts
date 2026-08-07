@@ -26,6 +26,8 @@ interface RawConfig {
   passes?: Record<string, boolean>;
   output?: { diff?: boolean; explanations?: boolean };
   model?: { provider?: string };
+  includeOriginal?: boolean;
+  minQuestions?: number;
 }
 
 interface ConfigResult {
@@ -34,6 +36,8 @@ interface ConfigResult {
   passes: Record<string, boolean>;
   output: { diff: boolean; explanations: boolean };
   model: { provider: string };
+  includeOriginal: boolean;
+  minQuestions: number;
   source: "cli" | "project" | "user" | "default";
   warnings: string[];
 }
@@ -50,6 +54,8 @@ const DEFAULTS: ConfigResult = {
   passes: {},
   output: { diff: true, explanations: true },
   model: { provider: "" },
+  includeOriginal: true,
+  minQuestions: 5,
   source: "default",
   warnings: [],
 };
@@ -115,6 +121,15 @@ function validateOutput(
   };
 }
 
+function validateIncludeOriginal(value: unknown): boolean | undefined {
+  return typeof value === "boolean" ? value : undefined;
+}
+
+function validateMinQuestions(value: unknown): number | undefined {
+  if (typeof value !== "number" || !Number.isFinite(value)) return undefined;
+  return Math.max(1, Math.floor(value));
+}
+
 // ─── Merge ──────────────────────────────────────────────────────────
 
 function applyConfigFile(
@@ -145,6 +160,16 @@ function applyConfigFile(
     const v = validateOutput(d.output);
     if (v) { next.output = v; touched = true; }
     else next.warnings.push(`${source} config: invalid output`);
+  }
+  if (d.includeOriginal !== undefined) {
+    const v = validateIncludeOriginal(d.includeOriginal);
+    if (v !== undefined) { next.includeOriginal = v; touched = true; }
+    else next.warnings.push(`${source} config: invalid includeOriginal`);
+  }
+  if (d.minQuestions !== undefined) {
+    const v = validateMinQuestions(d.minQuestions);
+    if (v !== undefined) { next.minQuestions = v; touched = true; }
+    else next.warnings.push(`${source} config: invalid minQuestions`);
   }
 
   if (touched) next.source = source;
@@ -208,6 +233,8 @@ export function toResolvedConfig(
 
 export interface MinConfig {
   readonly autoRefine: boolean;
+  readonly includeOriginal: boolean;
+  readonly minQuestions: number;
   readonly source: "project" | "user" | "default";
   readonly warning?: string;
 }
@@ -218,6 +245,8 @@ export function loadMinConfig(cwd: string, userConfigPath?: string): MinConfig {
     result.source === "cli" ? "project" : result.source;
   return {
     autoRefine: result.autoRefine,
+    includeOriginal: result.includeOriginal,
+    minQuestions: result.minQuestions,
     source,
     ...(result.warnings.length > 0
       ? { warning: result.warnings.join("; ") }

@@ -8,7 +8,7 @@ An OpenCode skill that turns messy human requests into high-quality AI instructi
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Node: ≥22](https://img.shields.io/badge/Node-%E2%89%A522-green.svg)](package.json)
-[![Status](https://img.shields.io/badge/status-v0.2.0--next.0-important.svg)](PLAN.md)
+[![Status](https://img.shields.io/badge/status-v0.3.0--next.0-important.svg)](PLAN.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 <p>
@@ -212,7 +212,7 @@ Most tools are single LLM calls that rewrite your prompt from scratch — changi
 
 **Is there a CLI?**
 
-Not yet. The `frp` binary (`frp refine`, `frp lint`, `frp doctor`) is planned. Current interface is the OpenCode skill + auto-refine plugin.
+Yes. The `frp` binary ships with the package: `frp refine`, `frp lint`, `frp doctor` (Windows/macOS/Linux). See [docs/cli-design.md](docs/cli-design.md). The primary interface remains the OpenCode skill + auto-refine plugin.
 
 More: [docs/faq.md](docs/faq.md)
 
@@ -240,12 +240,13 @@ More: [docs/faq.md](docs/faq.md)
 
 ## Status
 
-**v0.3.0-next.0 — Phase 2 complete, M3+M4 in progress.** The full refinement pipeline (11 passes) is implemented, tested (177 tests, 6/6 property invariants, coverage gates), and verified to load in OpenCode 1.18.5. The path to a public 1.0 lives in **[PLAN.md](PLAN.md)**.
+**v0.3.0-next.0 — Phase 2 complete, M3+M4 in progress.** The full refinement pipeline (11 passes) is implemented, tested (238 tests, 6/6 property invariants, coverage gates), and verified to load in OpenCode 1.18.5. The OpenCode auto-refine hook delivers **dual delivery** (verbatim original + refined prompt) with **≥5 guaranteed discovery questions** — see [docs/dual-delivery.md](docs/dual-delivery.md). The path to a public 1.0 lives in **[PLAN.md](PLAN.md)**.
 
 | Topic                      | Doc                                                                                             |
 | -------------------------- | ----------------------------------------------------------------------------------------------- |
 | **Path to public release** | **[PLAN.md](PLAN.md)**                                                                          |
 | Architecture & pass model  | [docs/architecture.md](docs/architecture.md)                                                    |
+| Dual delivery & discovery  | [docs/dual-delivery.md](docs/dual-delivery.md)                                                  |
 | Design philosophy          | [docs/design-philosophy.md](docs/design-philosophy.md)                                          |
 | Plugin API                 | [docs/plugin-api.md](docs/plugin-api.md)                                                        |
 | Configuration format       | [docs/configuration.md](docs/configuration.md)                                                  |

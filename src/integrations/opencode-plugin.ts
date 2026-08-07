@@ -22,6 +22,10 @@ import { refineOutgoing } from "./refine-outgoing.js";
 /** Plugin options tuple form: `["<plugin>", { "autoRefine": true }]`. */
 export interface PromptRefinerPluginOptions {
   readonly autoRefine?: boolean;
+  /** Include the verbatim original above the refined request (default: config / true). */
+  readonly includeOriginal?: boolean;
+  /** Guaranteed minimum discovery questions (default: config / 5). */
+  readonly minQuestions?: number;
 }
 
 /* Structural payload types — intentionally loose; validated at runtime. */
@@ -45,10 +49,24 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 /** Refines one text-bearing part or string in place. Returns nothing; mutates the container. */
 async function transformMessage(
   message: ChatMessage,
-  autoRefine: boolean,
+  options: {
+    autoRefine: boolean;
+    includeOriginal?: boolean;
+    minQuestions?: number;
+  },
 ): Promise<void> {
+  // exactOptionalPropertyTypes: never pass explicit `undefined` for absent flags.
+  const refineOptions = {
+    autoRefine: options.autoRefine,
+    ...(options.includeOriginal !== undefined
+      ? { includeOriginal: options.includeOriginal }
+      : {}),
+    ...(options.minQuestions !== undefined
+      ? { minQuestions: options.minQuestions }
+      : {}),
+  };
   if (typeof message.content === "string") {
-    const result = await refineOutgoing(message.content, { autoRefine });
+    const result = await refineOutgoing(message.content, refineOptions);
     message.content = result.text;
     return;
   }
@@ -65,7 +83,7 @@ async function transformMessage(
       part.type === "text" &&
       typeof part.text === "string"
     ) {
-      const result = await refineOutgoing(part.text, { autoRefine });
+      const result = await refineOutgoing(part.text, refineOptions);
       part.text = result.text;
     }
   }
@@ -79,8 +97,11 @@ export default async function promptRefinerPlugin(
   _input: unknown,
   options?: PromptRefinerPluginOptions,
 ) {
-  const autoRefine =
-    options?.autoRefine ?? loadMinConfig(process.cwd()).autoRefine;
+  const minConfig = loadMinConfig(process.cwd());
+  const autoRefine = options?.autoRefine ?? minConfig.autoRefine;
+  const includeOriginal =
+    options?.includeOriginal ?? minConfig.includeOriginal;
+  const minQuestions = options?.minQuestions ?? minConfig.minQuestions;
 
   return {
     "experimental.chat.messages.transform": async (
@@ -100,7 +121,11 @@ export default async function promptRefinerPlugin(
       }
       if (lastUser === undefined) return;
       try {
-        await transformMessage(lastUser, autoRefine);
+        await transformMessage(lastUser, {
+          autoRefine,
+          includeOriginal,
+          minQuestions,
+        });
       } catch (err) {
         // Failure doctrine: interception must never be worse than no interception.
         if (process.env.NODE_ENV !== "production") {

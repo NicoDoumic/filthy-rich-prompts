@@ -7,26 +7,42 @@
  *
  * Doctrine:
  * - autoRefine off, empty input, or a no-op refinement → byte-identical passthrough.
- * - `blocking` diagnostics append an Open questions section, so the *model*
- *   asks the user for the missing context (pre-release D5: plugins cannot
- *   invoke OpenCode's question tool; interactive per-pass approval is M3/TUI).
+ * - Dual delivery: when enabled (default), the executing model receives BOTH
+ *   the verbatim original (intent anchor — nothing is ever dropped from the
+ *   wire) AND the refined request, plus a guaranteed minimum of discovery
+ *   questions (default 5) that the model must resolve with the user before
+ *   executing. Ordering matters: original first anchors intent; refined next
+ *   is the working spec; questions last are the closure protocol.
  * - Any engine failure → original text, unchanged (architecture §8:
  *   interception must never be worse than no interception).
  */
 import { refine } from "../index.js";
 import type { RefineResult } from "../core/types.js";
-import { OPEN_QUESTIONS_HEADING } from "../core/modes.js";
-export { OPEN_QUESTIONS_HEADING };
+import {
+  buildDiscoveryQuestions,
+  composeDualDelivery,
+  composeRefinedWithDiscovery,
+  DEFAULT_MIN_QUESTIONS,
+} from "../core/discovery.js";
+export { OPEN_QUESTIONS_HEADING } from "../core/modes.js";
 
 export interface RefineOutgoingOptions {
   readonly autoRefine: boolean;
+  /** Include the verbatim original above the refined request (default true). */
+  readonly includeOriginal?: boolean;
+  /** Guaranteed minimum discovery questions (default {@link DEFAULT_MIN_QUESTIONS}). */
+  readonly minQuestions?: number;
 }
 
 export interface RefineOutgoingResult {
-  /** The text to send — refined when enabled and applicable, otherwise the original. */
+  /** The text to send — the composed wire format when applicable, otherwise the original. */
   readonly text: string;
   /** Whether the text differs from the input. */
   readonly changed: boolean;
+  /** The verbatim original, when the wire includes it. */
+  readonly original?: string;
+  /** The refined request (may embed a mode-level questions block). */
+  readonly refined?: string;
   /** Human-readable note about what happened (for logs/annotations). Never for passthroughs. */
   readonly note?: string;
 }
@@ -35,7 +51,8 @@ export interface RefineOutgoingResult {
 export type RefineFn = (raw: string) => Promise<RefineResult>;
 
 /**
- * Refines one outgoing prompt if auto-refine is enabled.
+ * Refines one outgoing prompt if auto-refine is enabled, composing the dual
+ * (original + refined + discovery questions) wire format.
  */
 export async function refineOutgoing(
   rawText: string,
@@ -45,28 +62,30 @@ export async function refineOutgoing(
   if (!options.autoRefine) return { text: rawText, changed: false };
   if (rawText.trim().length === 0) return { text: rawText, changed: false };
 
+  const includeOriginal = options.includeOriginal ?? true;
+  const minQuestions = options.minQuestions ?? DEFAULT_MIN_QUESTIONS;
+
   try {
     const result = await refineFn(rawText);
     if (result.refined === rawText) return { text: rawText, changed: false };
 
-    let text = result.refined;
-    const blocking = result.report.diagnostics.filter(
-      (d) => d.severity === "blocking",
+    const questions = buildDiscoveryQuestions(
+      result.report.diagnostics,
+      minQuestions,
     );
-    if (blocking.length > 0) {
-      text =
-        text.trimEnd() +
-        `\n\n${OPEN_QUESTIONS_HEADING}\n\n` +
-        blocking.map((d) => `- ${d.message}`).join("\n") +
-        "\n";
-    }
+
+    const text = includeOriginal
+      ? composeDualDelivery(rawText, result.refined, questions)
+      : composeRefinedWithDiscovery(result.refined, questions);
 
     const changes = result.explanations.length;
     const findings = result.report.diagnostics.length;
     return {
       text,
       changed: true,
-      note: `refined by prompt-refiner (${changes} explanation${changes === 1 ? "" : "s"}, ${findings} diagnostic${findings === 1 ? "" : "s"})`,
+      original: rawText,
+      refined: result.refined,
+      note: `refined by prompt-refiner (${changes} explanation${changes === 1 ? "" : "s"}, ${findings} diagnostic${findings === 1 ? "" : "s"}, ${questions.length} discovery question${questions.length === 1 ? "" : "s"})`,
     };
   } catch (err) {
     // Failure doctrine: the original prompt always goes through.

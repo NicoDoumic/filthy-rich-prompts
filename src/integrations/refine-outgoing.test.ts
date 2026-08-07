@@ -2,6 +2,10 @@ import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import type { RefineResult } from "../core/types.js";
 import {
+  ORIGINAL_HEADING,
+  REFINED_HEADING,
+} from "../core/discovery.js";
+import {
   OPEN_QUESTIONS_HEADING,
   refineOutgoing,
   type RefineFn,
@@ -93,6 +97,49 @@ describe("refineOutgoing", () => {
       crasher,
     );
     expect(result).toEqual({ text: "fix the thing", changed: false });
+  });
+
+  it("delivers the original AND the refined prompt when changed (dual delivery)", async () => {
+    const result = await refineOutgoing("write a blog post about tabs", {
+      autoRefine: true,
+    });
+    expect(result.changed).toBe(true);
+    expect(result.original).toBe("write a blog post about tabs");
+    expect(result.text).toContain(ORIGINAL_HEADING);
+    expect(result.text).toContain("write a blog post about tabs");
+    expect(result.text).toContain(REFINED_HEADING);
+    expect(result.text).toContain("# Task");
+  });
+
+  it("guarantees at least 5 discovery questions in the wire format", async () => {
+    const result = await refineOutgoing(
+      "make the login faster",
+      { autoRefine: true },
+    );
+    const block = result.text.split(OPEN_QUESTIONS_HEADING)[1] ?? "";
+    const numbered = block.match(/^\s*\d+\.\s/mg) ?? [];
+    expect(numbered.length).toBeGreaterThanOrEqual(5);
+    expect(result.note).toMatch(/\d+ discovery questions/);
+  });
+
+  it("omits the original block when includeOriginal is false, keeping the questions", async () => {
+    const result = await refineOutgoing(
+      "make the login faster",
+      { autoRefine: true, includeOriginal: false },
+    );
+    expect(result.text).not.toContain(ORIGINAL_HEADING);
+    expect(result.text).toContain(OPEN_QUESTIONS_HEADING);
+    expect(result.text).toMatch(/answer the \d+ questions above/);
+  });
+
+  it("honors a custom minQuestions count", async () => {
+    const result = await refineOutgoing(
+      "make it faster",
+      { autoRefine: true, minQuestions: 8 },
+    );
+    const block = result.text.split(OPEN_QUESTIONS_HEADING)[1] ?? "";
+    const numbered = block.match(/^\s*\d+\.\s/mg) ?? [];
+    expect(numbered.length).toBeGreaterThanOrEqual(8);
   });
 
   it("returns empty input untouched", async () => {

@@ -23,4 +23,27 @@ describe("constraint extraction", () => {
     const result = await constraintExtraction.run(ctxOf("Fix the login bug"));
     expect(result.prompt).toBeUndefined();
   });
+
+  it("labels a don't-break constraint as Preservation", async () => {
+    const result = await constraintExtraction.run(
+      ctxOf("make it faster but don't break the login flow"),
+    );
+    expect(result.prompt).toContain("Preservation");
+    expect(result.prompt).toContain("don't break");
+  });
+
+  it("labels an uncategorized constraint with the generic prefix", async () => {
+    const result = await constraintExtraction.run(
+      ctxOf("make this nice"),
+    );
+    expect(result.prompt).toContain("Constraint:");
+  });
+
+  it("deduplicates repeated constraint phrases", async () => {
+    const result = await constraintExtraction.run(
+      ctxOf("make it fast and make it fast"),
+    );
+    const matches = result.prompt!.match(/\[constraint: extracted\]/g) ?? [];
+    expect(matches.length).toBe(1);
+  });
 });

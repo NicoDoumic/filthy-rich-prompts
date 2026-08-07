@@ -66,6 +66,7 @@ user types prompt
 - **Vehicle:** a published OpenCode plugin shipped from this repo (`.opencode/plugin/` local dev copy + npm-distributed entry for users). It imports `refine()` from the installed package — no logic duplication.
 - **Toggle surface (three levels, highest precedence wins):** per-session `/refine on|off` (OpenCode command file) → project `refine.config.json` (`autoRefine: true|false`) → global default **off** in 0.x. Rationale for opt-in default: an interception layer that surprises users is an adoption killer; 1.0 revisits the default with benchmark evidence.
 - **Clarification UX:** `blocking` diagnostics (e.g., missing context the task depends on) trigger OpenCode's native `question` tool before send; `warning`/`info` diagnostics are attached as a short annotation instead of interrupting. In `silent` mode, nothing is ever asked — assumptions are labeled inline.
+- **Dual delivery ✅ (v0.3.0-next.0+):** the outgoing wire always carries the verbatim **original** AND the **refined** prompt (never refined alone), plus a **guaranteed ≥5 discovery questions** block (`minQuestions`, default 5) the executing model resolves with the user before starting. Config: `includeOriginal` (default true), `minQuestions` (default 5). Spec & reasoning effects: [docs/dual-delivery.md](docs/dual-delivery.md).
 - **Failure doctrine (architecture §8 applied):** if refinement itself errors, the original prompt goes through unmodified + a one-line note. Interception must never be worse than no interception.
 
 ## 4. Phases to Publish

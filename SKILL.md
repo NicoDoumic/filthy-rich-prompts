@@ -40,14 +40,13 @@ Do **not** activate for: trivial one-line commands, pure conversational turns, o
 
 ### Discovery Protocol
 
-1. **Read the prompt once** and identify the top 3–5 unknowns that would materially change the refined output.
-2. **Ask concise, multiple-choice questions** with sensible defaults when possible. Prefer 2–3 options, plus a free-text fallback (e.g., "Other / I'll specify").
-3. **Never ask more than 5 questions** per round. If more are needed, do a second round after the user answers.
-4. **Skip questions the prompt already answers.** Do not re-ask what is already explicit.
-5. **Tailor the questions to the prompt type** (coding task, bug report, writing brief, research question, etc.).
-6. **If the user does not answer** within a reasonable back-and-forth, proceed with best-judgment assumptions and mark them explicitly in the report.
-7. **User answers are stored in the refinement context** and made available to all downstream passes (e.g., used by intent detection, constraint extraction, and output format inference).
-8. **Silent mode skips discovery entirely.** Mark all assumptions explicitly in the final report instead.
+1. **Read the prompt once** and identify the top unknowns that would materially change the refined output.
+2. **Ask at least 5 targeted questions.** Ambiguity costs the executing model a full wasted turn if it guesses wrong — never skimp. More than 5 is fine when the prompt genuinely needs it; 5 is the floor, not the ceiling.
+3. **Prefer concise, multiple-choice questions** with sensible defaults. Do not re-ask what is already explicit.
+4. **Tailor the questions to the prompt type** (coding task, bug report, writing brief, research question, etc.).
+5. **If the user does not answer** within a reasonable back-and-forth, proceed with best-judgment assumptions and mark them explicitly in the report.
+6. **The enterprise must see both.** The executing model receives the verbatim original request AND the refined request together (dual delivery) — never the refined alone. The original anchors intent; the refined is the working spec.
+7. **Silent mode skips discovery entirely.** Mark all assumptions explicitly in the final report instead.
 
 ### Discovery Question Categories
 
@@ -98,11 +97,12 @@ Refinement is a pipeline of independent passes over an immutable context — nev
 
 Every refinement produces:
 
-1. **Discovery questions** (upfront, before refinement) — 2–5 targeted questions to fill gaps in the raw prompt.
-2. **The refined prompt** — ready to execute.
-3. **A diff** — original vs. refined, so the user can verify nothing was lost.
-4. **Explanations** — one rationale per change, grouped by pass.
-5. **A report** — detected intent, diagnostics (ambiguities, missing context), explicit assumptions, user answers, and any clarifying questions.
+1. **The verbatim original** — always delivered alongside the refined prompt so the executing model can cross-check intent (nothing is dropped from the wire).
+2. **Discovery questions** (upfront, before refinement) — **at least 5** targeted questions to fill gaps in the raw prompt and remove ambiguity.
+3. **The refined prompt** — ready to execute.
+4. **A diff** — original vs. refined, so the user can verify nothing was lost.
+5. **Explanations** — one rationale per change, grouped by pass.
+6. **A report** — detected intent, diagnostics (ambiguities, missing context), explicit assumptions, and the discovery questions asked.
 
 ## Hard Rules Recap
 
@@ -116,6 +116,7 @@ Every refinement produces:
 
 - `docs/architecture.md` — pipeline, context model, pass interface
 - `docs/design-philosophy.md` — the reasoning behind the prime directives
+- `docs/dual-delivery.md` — how the original + refined + discovery questions reach the model, and how the question section affects its reasoning
 - `docs/evaluation-metrics.md` — how "objectively better" is measured
 - `examples/before-after/` — worked transformations with per-change rationale
 - `docs/troubleshooting.md` — common installation and configuration issues

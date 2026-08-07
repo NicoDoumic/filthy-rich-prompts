@@ -101,6 +101,63 @@ describe("resolveConfig", () => {
     expect(result.output).toEqual({ diff: false, explanations: false });
   });
 
+  it("defaults includeOriginal and minQuestions", () => {
+    const result = resolveConfig(work, undefined, join(work, "nope.json"));
+    expect(result.includeOriginal).toBe(true);
+    expect(result.minQuestions).toBe(5);
+  });
+
+  it("reads includeOriginal and minQuestions from project config", () => {
+    writeConfig(
+      work,
+      '{ "includeOriginal": false, "minQuestions": 8 }',
+    );
+    const result = resolveConfig(work, undefined, join(work, "nope.json"));
+    expect(result.includeOriginal).toBe(false);
+    expect(result.minQuestions).toBe(8);
+    expect(result.source).toBe("project");
+  });
+
+  it("warns and keeps defaults on invalid minQuestions", () => {
+    writeConfig(work, '{ "minQuestions": "lots" }');
+    const result = resolveConfig(work, undefined, join(work, "nope.json"));
+    expect(result.minQuestions).toBe(5);
+    expect(result.warnings.length).toBeGreaterThan(0);
+  });
+
+  it("warns on invalid includeOriginal", () => {
+    writeConfig(work, '{ "includeOriginal": "yes" }');
+    const result = resolveConfig(work, undefined, join(work, "nope.json"));
+    expect(result.includeOriginal).toBe(true); // stays default
+    expect(result.warnings.join(" ")).toContain("invalid includeOriginal");
+  });
+
+  it("warns and ignores passes whose values are all invalid", () => {
+    writeConfig(work, '{ "passes": { "structure": "yes" } }');
+    const result = resolveConfig(work, undefined, join(work, "nope.json"));
+    expect(result.passes).toEqual({}); // nothing accepted
+    expect(result.warnings.join(" ")).toContain("invalid passes");
+  });
+
+  it("warns and keeps defaults on an invalid output object", () => {
+    writeConfig(work, '{ "output": { "diff": "yes", "explanations": [] } }');
+    const result = resolveConfig(work, undefined, join(work, "nope.json"));
+    expect(result.output).toEqual({ diff: true, explanations: true });
+    expect(result.warnings.join(" ")).toContain("invalid output");
+  });
+
+  it("warns on a JSON primitive instead of an object", () => {
+    writeConfig(work, "123");
+    const result = resolveConfig(work, undefined, join(work, "nope.json"));
+    expect(result.warnings.join(" ")).toContain("is not a JSON object");
+  });
+
+  it("warns on a non-ENOENT file read error", () => {
+    // Reading a directory throws EISDIR (not ENOENT) → read-error warning.
+    const result = resolveConfig(work, undefined, work);
+    expect(result.warnings.join(" ")).toContain("read error");
+  });
+
   it("treats partial output config as valid", () => {
     writeConfig(work, '{ "output": { "diff": false } }');
     const result = resolveConfig(work, undefined, join(work, "nope.json"));
@@ -141,13 +198,23 @@ describe("toResolvedConfig", () => {
 describe("loadMinConfig", () => {
   it("defaults to OFF when no config file exists", () => {
     const config = loadMinConfig(work, join(work, "nope.json"));
-    expect(config).toEqual({ autoRefine: false, source: "default" });
+    expect(config).toEqual({
+      autoRefine: false,
+      includeOriginal: true,
+      minQuestions: 5,
+      source: "default",
+    });
   });
 
   it("reads autoRefine from the project config", () => {
     writeConfig(work, '{ "autoRefine": true }');
     const config = loadMinConfig(work, join(work, "nope.json"));
-    expect(config).toEqual({ autoRefine: true, source: "project" });
+    expect(config).toEqual({
+      autoRefine: true,
+      includeOriginal: true,
+      minQuestions: 5,
+      source: "project",
+    });
   });
 
   it("reads autoRefine from the user config when the project has none", () => {
@@ -156,7 +223,12 @@ describe("loadMinConfig", () => {
     const projectDir = mkdtempSync(join(tmpdir(), "frp-config-proj-"));
     try {
       const config = loadMinConfig(projectDir, userPath);
-      expect(config).toEqual({ autoRefine: true, source: "user" });
+      expect(config).toEqual({
+        autoRefine: true,
+        includeOriginal: true,
+        minQuestions: 5,
+        source: "user",
+      });
     } finally {
       rmSync(projectDir, { recursive: true, force: true });
     }
@@ -167,7 +239,12 @@ describe("loadMinConfig", () => {
     writeFileSync(userPath, '{ "autoRefine": true }');
     writeConfig(work, '{ "autoRefine": false }');
     const config = loadMinConfig(work, userPath);
-    expect(config).toEqual({ autoRefine: false, source: "project" });
+    expect(config).toEqual({
+      autoRefine: false,
+      includeOriginal: true,
+      minQuestions: 5,
+      source: "project",
+    });
   });
 
   it("fails soft to default with a warning on malformed JSON", () => {
@@ -175,5 +252,12 @@ describe("loadMinConfig", () => {
     const config = loadMinConfig(work, join(work, "nope.json"));
     expect(config.autoRefine).toBe(false);
     expect(config.warning).toContain("not valid JSON");
+  });
+
+  it("carries includeOriginal and minQuestions through loadMinConfig", () => {
+    writeConfig(work, '{ "includeOriginal": false, "minQuestions": 9 }');
+    const config = loadMinConfig(work, join(work, "nope.json"));
+    expect(config.includeOriginal).toBe(false);
+    expect(config.minQuestions).toBe(9);
   });
 });

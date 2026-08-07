@@ -101,4 +101,26 @@ describe("verification", () => {
     const codes = result.diagnostics?.map((d) => d.code) ?? [];
     expect(codes).not.toContain("INFO_LOSS");
   });
+
+  it("flags info loss with few missing tokens without truncating the list", async () => {
+    // 3 of 5 significant tokens lost (> 20%), but ≤ 10 missing → no ellipsis.
+    const baseCtx = ctxOf("fix the login bug now please");
+    const modifiedCtx = applyResult(baseCtx, { prompt: "fix bug" });
+    const result = await verification.run(modifiedCtx);
+    const infoLoss = result.diagnostics?.find((d) => d.code === "INFO_LOSS");
+    expect(infoLoss).toBeDefined();
+    expect(infoLoss!.message).not.toContain("...");
+  });
+
+  it("emits INTENT_VERIFIED without goal suggestions when intent has no goal", async () => {
+    const ctx = applyResult(ctxOf("some prompt"), {
+      intent: { category: "coding", confidence: 0.7 },
+    });
+    const result = await verification.run(ctx);
+    const verified = result.diagnostics?.find(
+      (d) => d.code === "INTENT_VERIFIED",
+    );
+    expect(verified).toBeDefined();
+    expect(verified!.suggestions).toBeUndefined();
+  });
 });

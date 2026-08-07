@@ -1,9 +1,18 @@
 import { describe, expect, it } from "vitest";
+import {
+  ORIGINAL_HEADING,
+  REFINED_HEADING,
+} from "../core/discovery.js";
 import promptRefinerPlugin from "./opencode-plugin.js";
+import { OPEN_QUESTIONS_HEADING } from "./refine-outgoing.js";
 
 type Hook = (input: unknown, output: { messages?: unknown }) => Promise<void>;
 
-async function hookWith(options?: { autoRefine?: boolean }): Promise<Hook> {
+async function hookWith(options?: {
+  autoRefine?: boolean;
+  includeOriginal?: boolean;
+  minQuestions?: number;
+}): Promise<Hook> {
   const hooks = (await promptRefinerPlugin({}, options)) as unknown as Record<
     string,
     Hook
@@ -47,6 +56,14 @@ describe("opencode-plugin", () => {
       type: "image",
       url: "data:image/png;base64,x",
     });
+  });
+
+  it("transforms text parts nested in content-array form (defaults for new options)", async () => {
+    const hook = await hookWith({ autoRefine: true });
+    const textPart = { type: "text", text: "make the export faster" };
+    const message = { role: "user", content: [textPart] };
+    await hook({}, { messages: [message] });
+    expect(textPart.text).toContain("# Task");
   });
 
   it("only transforms the LAST user message", async () => {
@@ -93,5 +110,35 @@ describe("opencode-plugin", () => {
     const message = { role: "user", content: "write a blog post about tabs" };
     await hook({}, { messages: [message] });
     expect(message.content).toContain("# Task");
+  });
+
+  it("delivers the original AND the refined request through the hook (dual delivery)", async () => {
+    const hook = await hookWith({ autoRefine: true });
+    const raw = "can you make it faster? using react btw";
+    const message = { role: "user", content: raw };
+    await hook({}, { messages: [message] });
+    expect(message.content).toContain(ORIGINAL_HEADING);
+    expect(message.content).toContain(raw);
+    expect(message.content).toContain(REFINED_HEADING);
+    expect(message.content).toContain("## Context");
+    expect(message.content).toContain(OPEN_QUESTIONS_HEADING);
+  });
+
+  it("plugin includeOriginal:false omits the original block", async () => {
+    const hook = await hookWith({ autoRefine: true, includeOriginal: false });
+    const message = { role: "user", content: "can you make it faster?" };
+    await hook({}, { messages: [message] });
+    expect(message.content).not.toContain(ORIGINAL_HEADING);
+    expect(message.content).toContain("# Task");
+    expect(message.content).toContain(OPEN_QUESTIONS_HEADING);
+  });
+
+  it("plugin minQuestions is honored through the hook", async () => {
+    const hook = await hookWith({ autoRefine: true, minQuestions: 7 });
+    const message = { role: "user", content: "can you make it faster?" };
+    await hook({}, { messages: [message] });
+    const block = message.content.split(OPEN_QUESTIONS_HEADING)[1] ?? "";
+    const numbered = block.match(/^\s*\d+\.\s/mg) ?? [];
+    expect(numbered.length).toBeGreaterThanOrEqual(7);
   });
 });

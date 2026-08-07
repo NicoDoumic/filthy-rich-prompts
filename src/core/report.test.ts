@@ -44,4 +44,10 @@ describe("buildReport", () => {
       ].sort(),
     );
   });
+
+  it("includes the mode in the report when configured", () => {
+    const ctx = initialContext("raw", { ...config, mode: "beginner" });
+    const report = buildReport(ctx, []);
+    expect(report.mode).toBe("beginner");
+  });
 });

@@ -19,6 +19,13 @@ describe("task decomposition", () => {
     expect(result.prompt).toBeUndefined();
   });
 
+  it("returns no-op when the prompt already has a Sub-tasks section", async () => {
+    const result = await taskDecomposition.run(
+      ctxOf("Fix the bug and then add tests\n\n## Sub-tasks\n\n### Sub-task 1\n\nFix"),
+    );
+    expect(result.prompt).toBeUndefined();
+  });
+
   it("returns no-op for empty prompts", async () => {
     const result = await taskDecomposition.run(ctxOf(""));
     expect(result.prompt).toBeUndefined();

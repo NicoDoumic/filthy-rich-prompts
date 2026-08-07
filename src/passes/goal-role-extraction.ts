@@ -42,9 +42,10 @@ export const goalRoleExtraction: Pass = {
     // No-op: empty prompt.
     if (text.trim().length === 0) return {};
 
-    // No-op: already has objective or role sections.
+    // No-op: already has objective or role sections. The Role-only check is
+    // deliberately absent: EXPLICIT_GOAL matches any line starting with "# "
+    // (including "## Role"), so a Role check below would be unreachable.
     if (EXPLICIT_GOAL.test(text)) return {};
-    if (/\n## Role\n/.test(text)) return {};
 
     const category = ctx.intent.category;
     const role = CATEGORY_ROLES[category] ?? "Knowledgeable assistant";
